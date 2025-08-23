@@ -48,7 +48,7 @@ def verification():
 
 ### **Flux de contrôle**
 
-```mermaid
+```
 
     A[Début] --> B[Afficher "Bonjour {pseudo}"]
     B --> C[Demander mot de passe]
