@@ -1,9 +1,3 @@
-# 1. Documentation du code auth.py
-## [auth.py](documentation/auth.py.md)
-# 2. Documentation du code main.py
-## [main.py](documentation/main.py.md)
-# 3. Documentation du Code game.py
-
 **⚠️ Ce dépôt est privé et réalisé dans le cadre du module INFDIPC1.  
 Il ne doit pas être partagé ni réutilisé en dehors de ce contexte académique. <br>
 https://github.com/Gw3nhael51/projet_cube_un
@@ -17,7 +11,6 @@ https://github.com/Gw3nhael51/projet_cube_un
 ## ✅ Fichiers complémentaires
 
 - `todo.md` – Liste des tâches à réaliser / réalisées
-- `.venv/` – Environnement virtuel Python (à exclure du dépôt via `.gitignore`)
 
 ---
 
