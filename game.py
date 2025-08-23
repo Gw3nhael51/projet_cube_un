@@ -8,27 +8,41 @@ import time
     # attack_player1 = damage_creature_player1 - defense_creature_player2
     # attack_player2 = damage_creature_player2 - defense_creature_player1
 
-# Formule d'une attaque spéciale
+# Formule d'attaque spéciale
 
-# definition variables player1 et player2
-player1 = input("Quel est le pseudo du joueur 1? ").lower().replace(" ", "")
-player2 = input("Quel est le pseudo du joueur 2? ").lower().replace(" ", "")
+# Fonction de vérification des pseudos
 
-# Verifier
-# Fonction pour verifier joueur1 (player1) et pseudo player2 (verifier si alpha et si une des entrées est vide)
-def pseudo_verify(player1, player2):
+def pseudo_verify():
     while True:
-        if not player1.isalpha() or not player2.isalpha():
-            print("❌ Le pseudo du Joueur ne doit contenir que des lettres")
+        # demander au joueur 1 son pseudo
+        pseudo1 = input("Quel est le pseudo du joueur 1? ").lower().replace(" ", "")
+
+        # Verifier le format du pseudo
+        if not pseudo1.isalpha():
+            print("❌ Le format de pseudo du joueur 1 n'est pas correct")
             continue
 
-# Est-ce que les deux pseudos sont deja enregistrés ?
-# sinon les enregistrer
-# ou alors enregistrer le pseudo manquant
+        # --------------------------------
+
+        # demander au joueur 2 son pseudo
+        pseudo2 = input("Quel est le pseudo du joueur 2? ").lower().replace(" ", "")
+
+        # Verifier le format du pseudo
+        if not pseudo2.isalpha():
+            print("❌ Le format de pseudo du joueur 2 n'est pas correct")
+            continue
+
+        print("Le format des pseudos est correct.")
+        return pseudo1, pseudo2
+
+# Appel à la fonction
+player1, player2 = pseudo_verify()
+
+print(f"Bienvenue {player1} et {player2}")
 
 # Créer une fonction, si tout est OK
 # Message de bienvenue aux deux joueurs
-print(f"Bienvenue {player1} et {player2}")
+# print(f"Bienvenue {player1} et {player2}")
 time.sleep(2)
 
 # Afficher les règles

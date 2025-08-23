@@ -6,6 +6,7 @@
 
 ## 🎮 Lancement du jeu
 - [X] Demander les pseudos des deux joueurs
+- [X] Verifier le format des pseudos
 - [] Vérifier si les pseudos existent dans la base SQLite
 - [] Enregistrer les pseudos manquants
 
