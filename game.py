@@ -12,7 +12,7 @@ import time
     # special_attack_player1 = damage_creature_player1 - defense_creature_player2 - PV > attaque normale
     # special_attack_player2 = damage_creature_player2 - defense_creature_player1 - PV > attaque normale
 
-    # mais si régénération
+    # mais sil y a régénération
         # special_attack_player1, special_attack_player2  =  PV actuel du joueur + PV du coup spécial <= PV max
 
 # passer son tour
