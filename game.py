@@ -2,7 +2,6 @@ import random
 import sqlite3
 import time
 
-
 # Connexion acceptée, lancement du jeu
 
 # Formule d'une attaque normale
