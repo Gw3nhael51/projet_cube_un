@@ -2,14 +2,23 @@ import random
 import sqlite3
 import time
 
+
 # Connexion acceptée, lancement du jeu
 
-# Formule d'une attaque
+# Formule d'une attaque normale
     # attack_player1 = damage_creature_player1 - defense_creature_player2
     # attack_player2 = damage_creature_player2 - defense_creature_player1
 
 # Formule d'attaque spéciale
+    # special_attack_player1 = damage_creature_player1 - defense_creature_player2 - PV > attaque normale
+    # special_attack_player2 = damage_creature_player2 - defense_creature_player1 - PV > attaque normale
 
+    # mais si régénération
+        # special_attack_player1, special_attack_player2  =  PV actuel du joueur + PV du coup spécial <= PV max
+
+# passer son tour
+    # si tour = 0 , ne pas afficher l'option
+    # sinon attack_player = 0
 
 # Fonction de vérification des pseudos
 
@@ -36,12 +45,13 @@ def pseudo_verify():
         print("Le format des pseudos est correct.")
         return pseudo1, pseudo2
 
+
 # Appel à la fonction
 player1, player2 = pseudo_verify()
 
 # Message de bienvenue aux deux joueurs
 print(f"Bienvenue {player1} et {player2}")
-time.sleep(2) # Attendre 2 secondes
+time.sleep(2)  # Attendre 2 secondes
 
 # Afficher les règles
 print("🐉 RÈGLES DU JEU — Combat de Créatures\n")
@@ -102,24 +112,24 @@ tour = 0
 print("---⚔️ Début du combat ⚔️---")
 # Afficher le choix des créatures avec leur stats
 # Player1 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
-print(f"{player1}\n" 
-#Afficher VS
-      "VS\n" 
-# Afficher Player2 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
+print(f"{player1}\n"
+      #Afficher VS
+      "VS\n"
+      # Afficher Player2 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
       f"{player2}\n")
 
 #  while player1.pv > 0 and player2.pv > 0:
-    # try:
-        # Affiche les PV creature_player1
-        # Demander l'attaque du Joueur 1:  attaquer, capacité spéciale, passer son tour.
+# try:
+# Affiche les PV creature_player1
+# Demander l'attaque du Joueur 1:  attaquer, capacité spéciale, passer son tour.
 
-        # Affiche les PV creature_player2
-        # Demander l'attaque du joueur 2:  attaquer, capacité spéciale, passer son tour.
+# Affiche les PV creature_player2
+# Demander l'attaque du joueur 2:  attaquer, capacité spéciale, passer son tour.
 
-        # afficher le résumé des 2 attaques
-        # continuer
-    # except ValueError:
-        # print("❌ Choisissez une attaque valide")
+# afficher le résumé des 2 attaques
+# continuer
+# except ValueError :
+# print("❌ Choisissez une attaque valide")
 
 
 # Description:
