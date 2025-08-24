@@ -91,7 +91,7 @@ time.sleep(12)
 
 # Récupérer dans la DB les créatures et les stats de chaque créature
 # Afficher la liste des créatures disponibles et les stats, rendre indisponible
-# le choix du premier joueur au joueur 2
+# le choix des joueurs
 # Demander choix_creature joueur1
 # Demander choix_creature joueur2
 # Définir la variable tour à zéro
