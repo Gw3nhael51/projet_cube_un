@@ -10,6 +10,7 @@ import time
 
 # Formule d'attaque spéciale
 
+
 # Fonction de vérification des pseudos
 
 def pseudo_verify():
@@ -87,12 +88,13 @@ print("📟 Interface console\n"
 time.sleep(12)
 
 # Accepter les règles ?
+
 # Récupérer dans la DB les créatures et les stats de chaque créature
 # Afficher la liste des créatures disponibles et les stats, rendre indisponible
 # le choix du premier joueur au joueur 2
 # Demander choix_creature joueur1
 # Demander choix_creature joueur2
-# Définir la variable tour à 0
+# Définir la variable tour à zéro
 tour = 0
 
 # La partie peut commencer.

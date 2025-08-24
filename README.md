@@ -1,5 +1,4 @@
-**⚠️ Ce dépôt est privé et réalisé dans le cadre du module INFDIPC1.  
-Il ne doit pas être partagé ni réutilisé en dehors de ce contexte académique. <br>
+⚠️ Ce dépôt est réalisé dans le cadre du module INFDIPC1.  . <br>
 https://github.com/Gw3nhael51/projet_cube_un
 
 ## 📄 Documentation
@@ -14,4 +13,4 @@ https://github.com/Gw3nhael51/projet_cube_un
 
 ---
 
-⚠️ Ce dépôt est privé et réalisé dans le cadre du module **INFDIPC1**.
+⚠️ Ce dépôt est réalisé dans le cadre du module **INFDIPC1**.
