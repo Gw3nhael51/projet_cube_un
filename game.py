@@ -59,7 +59,7 @@ time.sleep(1)
 print("🎯 Objectif\n"
       "Affrontez votre adversaire dans un duel stratégique où chaque joueur incarne une créature aux pouvoirs uniques.\n"
       "Le but ? Réduire les points de vie (PV) de la créature ennemie à zéro pour remporter la victoire.\n")
-time.sleep(12)
+time.sleep(5)
 
 print("🧙‍♂️ Mise en place\n"
       "1. Chaque joueur choisit une créature parmi celles proposées.\n"
@@ -93,7 +93,7 @@ print("📟 Interface console\n"
       "   - Sélection des créatures\n"
       "   - Affichage des statistiques\n"
       "   - Résumé des actions après chaque tour\n"
-      "   - Visibilité de l'historique de parties avec /history\n")
+      "   - Visibilité de l'historique des parties avec /history\n")
 time.sleep(12)
 
 # Accepter les règles ?
@@ -121,11 +121,13 @@ print(f"{player1}\n"
 # try:
 # Affiche les PV creature_player1
 # Demander l'attaque du Joueur 1:  attaquer, capacité spéciale, passer son tour.
+# afficher le résumé
 
 # Affiche les PV creature_player2
 # Demander l'attaque du joueur 2:  attaquer, capacité spéciale, passer son tour.
+# afficher le résumé
 
-# afficher le résumé des 2 attaques
+# afficher le résumé
 # continuer
 # except ValueError :
 # print("❌ Choisissez une attaque valide")

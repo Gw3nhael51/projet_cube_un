@@ -14,37 +14,43 @@ def main():
     # Création des tables (schéma DB)
 
     cur.executescript("""
-    -- Table des attaques spéciales
-    CREATE TABLE IF NOT EXISTS special_attacks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  -- identifiant unique auto-incrémenté
-        name TEXT UNIQUE,                      -- nom de l’attaque spéciale (clé logique)
-        type TEXT,                             -- type d’effet ("damage", "heal", "buff")
-        value INTEGER,                         -- valeur numérique (+3 dégâts, +10 PV, etc.)
-        description TEXT                       -- description affichable
-    );
-
     -- Table des créatures
+
     CREATE TABLE IF NOT EXISTS creatures (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  -- auto-incremented unique identifier
-        name TEXT UNIQUE,                      -- creature's name
-        hp INTEGER,                            -- basic health points
-        attack INTEGER,                        -- attack power
-        defense INTEGER,                       -- defense
-        ability TEXT                           -- special attack name (key to special_attacks.name)
+        id_creature INTEGER PRIMARY KEY AUTOINCREMENT,
+        name_creature TEXT UNIQUE,
+        hp_initial TEXT, 
+        attack value INTEGER,
+        defense,
+        spec_attack_name,
+        spec_attack_value,
+        spec_attack_name TEXT,
     );
-
-    -- Table des combats joués (historique)
-    CREATE TABLE IF NOT EXISTS battles (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  -- auto-incremented unique identifier
-        started_at TEXT,                       -- date/time of the start of the game
-        finished_at TEXT,                      -- date/time of the end of the game
-        player1 TEXT,                          -- nom du joueur 1
-        player2 TEXT,                          -- nom du joueur 2
-        winner TEXT                            -- nom du gagnant
-    );
-    """)
-
     
+    -- Table HISTORY
+    CREATE TABLE IF NOT EXISTS history (
+        id_battle INTEGER PRIMARY KEY AUTOINCREMENT,
+        datetime_battle DATETIME,
+        id_player_winner
+    )
+    
+    -- TABLE des joueurs
+    CREATE TABLE IF NOT EXISTS joueurs (
+        id_player INTEGER PRIMARY KEY AUTOINCREMENT,
+        name_player TEXT
+    )
+
+    # -- Table des combats joués (historique)
+    # CREATE TABLE IF NOT EXISTS battles (
+    #     id INTEGER PRIMARY KEY AUTOINCREMENT,  -- auto-incremented unique identifier
+    #     started_at TEXT,                       -- date/time of the start of the game
+    #     finished_at TEXT,                      -- date/time of the end of the game
+    #     player1 TEXT,                          -- nom du joueur 1
+    #     player2 TEXT,                          -- nom du joueur 2
+    #     winner TEXT                            -- nom du gagnant
+    # );
+    # """)
+
     # Données de base (initialisation)
    
 
