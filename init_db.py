@@ -8,74 +8,56 @@ DB_PATH = Path(__file__).with_name("game.db")
 def main():
     # Connexion à SQLite (si le fichier n’existe pas, il sera créé automatiquement)
     con = sqlite3.connect(DB_PATH)
+    con.execute("PRAGMA foreign_keys = ON") # IMPORTANT! PRAGMA foreign_keys = ON doit être exécutée à chaque nouvelle connexion.
     cur = con.cursor()
 
-    
     # Création des tables (schéma DB)
 
     cur.executescript("""
-    -- Table des créatures
+        CREATE TABLE IF NOT EXISTS creatures (
+            id_creature INTEGER PRIMARY KEY AUTOINCREMENT,
+            name_creature TEXT UNIQUE,
+            hp_initial TEXT, 
+            attack_value INTEGER,
+            defense_value INTEGER,
+            spec_attack_name TEXT,
+            spec_attack_value TEXT,
+            spec_attack_descr TEXT
+        );
 
-    CREATE TABLE IF NOT EXISTS creatures (
-        id_creature INTEGER PRIMARY KEY AUTOINCREMENT,
-        name_creature TEXT UNIQUE,
-        hp_initial TEXT, 
-        attack value INTEGER,
-        defense,
-        spec_attack_name,
-        spec_attack_value,
-        spec_attack_name TEXT,
-    );
-    
-    -- Table HISTORY
-    CREATE TABLE IF NOT EXISTS history (
-        id_battle INTEGER PRIMARY KEY AUTOINCREMENT,
-        datetime_battle DATETIME,
-        id_player_winner
-    )
-    
-    -- TABLE des joueurs
-    CREATE TABLE IF NOT EXISTS joueurs (
-        id_player INTEGER PRIMARY KEY AUTOINCREMENT,
-        name_player TEXT
-    )
+        CREATE TABLE IF NOT EXISTS players (
+            id_player INTEGER PRIMARY KEY AUTOINCREMENT,
+            name_player TEXT,
+            id_creature INTEGER,
+            FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
+        );
 
-    # -- Table des combats joués (historique)
-    # CREATE TABLE IF NOT EXISTS battles (
-    #     id INTEGER PRIMARY KEY AUTOINCREMENT,  -- auto-incremented unique identifier
-    #     started_at TEXT,                       -- date/time of the start of the game
-    #     finished_at TEXT,                      -- date/time of the end of the game
-    #     player1 TEXT,                          -- nom du joueur 1
-    #     player2 TEXT,                          -- nom du joueur 2
-    #     winner TEXT                            -- nom du gagnant
-    # );
-    # """)
-
-    # Données de base (initialisation)
-   
-
-    # Liste des attaques spéciales avec leurs effets
-    special_attacks = [
-        # (nom, type, valeur, description)
-        ("souffle_de_feu", "damage", 3, "Adds +3 damage to the attack"),
-        ("soin_magique", "heal", 10, "Heals 10 PV"),
-        ("rage", "buff", 3, "Increases the attack by +3")
-    ]
-    cur.executemany("""
-        INSERT OR IGNORE INTO special_attacks (name, type, value, description)
-        VALUES (?, ?, ?, ?)
-    """, special_attacks)
+        CREATE TABLE IF NOT EXISTS history (
+            id_battle INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_player_winner INTEGER,
+            id_creature INTEGER,
+            FOREIGN KEY (id_player_winner) REFERENCES players(id_player),
+            FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
+        );
+    """)
 
     # Liste des créatures jouables
     creatures = [
-        # (nom, hp, attaque, défense, capacité spéciale associée)
-        ("Dragon", 50, 10, 5, "souffle_de_feu"),
-        ("Licorne", 40, 8, 8, "soin_magique"),
-        ("Troll", 60, 6, 6, "rage")
+        # (name_creature, hp_initial, attack_value, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr)
+        ("Démon", "45", 10, 5, "Épée de l'Enfer", "20", "Inflige des dégâts massifs"),
+        ("Troll", "60", 6, 6, "Rage", "15", "Double l'attaque pendant un tour"),
+        ("Sorcière", "?", "?", "?", "?", "?", "?"),
+        ("Licorne", "40", 8, 8, "Soin magique", "25", "Restaure des PV"),
+        ("Centaure", "?", "?", "?", "?", "?", "?"),
+        ("Guts", "?", "?", "?", "?", "?", "?"),
+        ("Dragon", "50", 10, 5, "Souffle de feu", "30", "Brûle l'ennemi"),
+        ("Loup-garou", "?", "?", "?", "?", "?", "?"),
+        ("Elfe", "?", "?", "?", "?", "?", "?")
     ]
+
     cur.executemany("""
-        INSERT OR IGNORE INTO creatures (name, hp, attack, defense, ability)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT OR IGNORE INTO creatures (name_creature, hp_initial, attack_value, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     """, creatures)
 
     # On valide les changements (commit) et on ferme la connexion
@@ -86,14 +68,14 @@ def main():
 if __name__ == "__main__":
     main()
 
-#special_attacks :
-#C’est le catalogue des attaques spéciales.
-#Exemple : "souffle_de_feu" est de type "damage" avec une valeur de 3.
+#Special_attacks :
+# Catalogue des attaques spéciales.
+# Exemple : "souffle_de_feu" est de type "damage" avec une valeur de 3.
 
-#creatures :
-#Chaque créature a une attaque spéciale associée via ability.
-#Exemple : "Dragon" a ability = "souffle_de_feu".
+#Creatures :
+#Chaque créature a une attaque spéciale associée via spec_attack_name.
+#Exemple : "Dragon" a spec_attack_name = "souffle_de_feu".
 
-#battles :
-#Sert de journal pour prouver en soutenance que la BD est bien utilisée.
-#Exemple : après une partie, on insère "Joueur 1 vs Joueur 2, gagnant Joueur 1".
+# History :
+# Sert de journal pour voir les combats précedents.
+# Exemple : après une partie, on insère "Joueur 1 vs Joueur 2, gagnant Joueur 1 avec x tours".
