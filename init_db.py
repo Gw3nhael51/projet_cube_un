@@ -2,7 +2,7 @@
 import sqlite3
 from pathlib import Path
 
-# On définit où sera créée la base de données (dans le même dossier que ce fichier)
+# On définit où sera créée la base de données (dans le même dossier que ce fichier).
 DB_PATH = Path(__file__).with_name("game.db")
 
 def main():
@@ -43,16 +43,16 @@ def main():
 
     # Liste des créatures jouables
     creatures = [
-        # (name_creature, hp_initial, attack_value, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr)
-        ("Démon", "45", 10, 5, "Épée de l'Enfer", "20", "Inflige des dégâts massifs"),
-        ("Troll", "60", 6, 6, "Rage", "15", "Double l'attaque pendant un tour"),
-        ("Sorcière", "?", "?", "?", "?", "?", "?"),
-        ("Licorne", "40", 8, 8, "Soin magique", "25", "Restaure des PV"),
-        ("Centaure", "?", "?", "?", "?", "?", "?"),
-        ("Guts", "?", "?", "?", "?", "?", "?"),
-        ("Dragon", "50", 10, 5, "Souffle de feu", "30", "Brûle l'ennemi"),
-        ("Loup-garou", "?", "?", "?", "?", "?", "?"),
-        ("Elfe", "?", "?", "?", "?", "?", "?")
+    #   (name_creature, hp_initial, attack_value, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr)
+        ("Démon",   45, 10, 4, "Épée de l'Enfer", "20", "Inflige des dégâts massifs"),
+        ("Troll",   60, 6, 6, "Rage", 15, "Double l'attaque pendant un tour"),
+        ("Sorcière", 35, 11,4, "Malédiction", 3, "Réduit l'attaque de l'adversaire de -3PV pendant 2 tours"),
+        ("Licorne", 40, 8, 8, "Soin magique", 10, "Restaure de 10 PV, utilisable une fois"),
+        ("Centaure", 50, 9, 6, "Charge rapide", 3, "Inflige un dégât doublé mais perd 3PV en contre coup"),
+        ("Guerrier noir", 55, 8, 7, "Parade Héroïque", 0, "Bloque l'attaque complète au prochain tour"),
+        ("Dragon", 50, 10, 5, "Souffle de feu", 30, "Brûle l'ennemi, perte de vie a l'ennemi en plus part tour"),
+        ("Loup-garou", 45, 9, 6, "Appel de la meute", 3 , "Inflige un dégât multiplié par 3"),
+        ("Elfe", 40, 9, 5, "Tir précis", 8, "Inflige 8 dégâts garantis en ignorant la défense de l’adversaire.")
     ]
 
     cur.executemany("""
