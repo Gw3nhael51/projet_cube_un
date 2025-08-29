@@ -36,6 +36,7 @@ def main():
             id_battle INTEGER PRIMARY KEY AUTOINCREMENT,
             id_player_winner INTEGER,
             id_creature INTEGER,
+            date DATETIME,
             FOREIGN KEY (id_player_winner) REFERENCES players(id_player),
             FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
         );
@@ -60,10 +61,22 @@ def main():
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """, creatures)
 
+    #  Liste des joueurs (test)
+    #  name_player, id_creature
+
+    players = [
+        ("admin", 3)
+    ]
+
+    cur.executemany("""
+        INSERT OR IGNORE INTO players (name_player, id_creature)
+        VALUES (?, ?)
+    """, players)
+
     # On valide les changements (commit) et on ferme la connexion
     con.commit()
     con.close()
-    print(" Database created successfully.")
+    print(" Database créée avec succès ✔️.")
 
 if __name__ == "__main__":
     main()

@@ -12,10 +12,10 @@
 
 ## 🗃️ Base de Données
 - [] Créer une base SQLite pour les tables :
-  - `joueurs`
-  - `créatures`
-  - `historique`
-- [] Concevoir le MCD (Modèle Conceptuel de Données)
+  - [X] `joueurs`
+  - [X] `créatures`
+  - [X] `historique`
+  - [X] Concevoir le MCD (Modèle Conceptuel de Données)
 
 ## 🧠 Logique de jeu
 - [X] Afficher un message de bienvenue aux joueurs
@@ -41,12 +41,12 @@
 - [] Vérifier que toutes les fonctionnalités fonctionnent sans érreur(s)
 
 ## 📐 Diagrammes UML
-- [] Cas d’utilisation (choix créature, attaque, capacité spéciale)
-- [] Séquence (tour de combat)
+- [X] Cas d’utilisation (choix créature, attaque, capacité spéciale)
+- [X] Séquence (tour de combat)
 
 ## 🖼️ Maquettes d’écran
-- [] Écran de sélection des créatures
-- [🔄] Écran de combat (PV + options)
+- [X] Écran de sélection des créatures
+- [X] Écran de combat (PV + options)
 
 ## 📄 Spécifications Techniques
 - [] Décrire la formule de calcul des dégâts
