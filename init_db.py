@@ -1,15 +1,20 @@
 # init_db.py
+
 import sqlite3
 from pathlib import Path
 
-# On définit où sera créée la base de données (dans le même dossier que ce fichier).
-DB_PATH = Path(__file__).with_name("game.db")
+# On définit où sera créée la base de données (dans un dossier appelé database).
+DB_folder = Path(__file__).parent /'database'
+DB_folder.mkdir(parents=True, exist_ok=True)
+
+DB_PATH = DB_folder / 'game.db'
 
 def main():
     # Connexion à SQLite (si le fichier n’existe pas, il sera créé automatiquement)
     con = sqlite3.connect(DB_PATH)
-    con.execute("PRAGMA foreign_keys = ON") # IMPORTANT! PRAGMA foreign_keys = ON doit être exécutée à chaque nouvelle connexion.
+    con.execute("PRAGMA foreign_keys = ON") # IMPORTANT! PRAGMA foreign_keys = ON, doit être exécutée à chaque nouvelle connexion.
     cur = con.cursor()
+    print("Connexion réussie ✔️")
 
     # Création des tables (schéma DB)
 
@@ -62,7 +67,7 @@ def main():
     """, creatures)
 
     #  Liste des joueurs (test)
-    #  name_player, id_creature
+    #  name_player, id_creature (creature choisie)
 
     players = [
         ("admin", 3)
