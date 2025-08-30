@@ -1,4 +1,4 @@
-# init_db.py
+# create_db.py
 
 import sqlite3
 from pathlib import Path

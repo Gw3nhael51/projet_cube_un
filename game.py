@@ -1,6 +1,7 @@
 import random
 import sqlite3
 import time
+from database.db_connect import *
 
 # Connexion acceptée, lancement du jeu
 
@@ -22,6 +23,7 @@ import time
 # Fonction de vérification des pseudos
 
 def pseudo_verify():
+    database_connexion()
     while True:
         # demander au joueur 1 son pseudo
         pseudo1 = input("Quel est le pseudo du joueur 1? ").lower().replace(" ", "")
@@ -48,7 +50,7 @@ def pseudo_verify():
 # Appel à la fonction
 player1, player2 = pseudo_verify()
 
-# Message de bienvenue aux deux joueurs
+# Message de bienvenue aux deux joueurs, faire entrer pour faire afficher le message suivant
 print(f"Bienvenue {player1} et {player2}")
 time.sleep(2)  # Attendre 2 secondes
 
@@ -99,6 +101,7 @@ time.sleep(12)
 # Accepter les règles ?
 
 # Récupérer dans la DB les créatures et les stats de chaque créature
+
 # Afficher la liste des créatures disponibles et les stats, rendre indisponible
 # le choix des joueurs
 # Demander choix_creature joueur1
