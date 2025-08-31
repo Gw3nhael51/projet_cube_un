@@ -104,7 +104,7 @@ def main():
     # -----------------------------------------------------
     # La partie peut commencer.
 
-    print("---⚔️ Début du combat ⚔️---")
+    print("\n ---⚔️ Début du combat ⚔️---")
     # Afficher le choix des créatures avec leur stats
     # Player1 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
     print(f"{player1}\n"
@@ -147,3 +147,7 @@ if __name__ == '__main__':
 
 # Description:
 # time.sleep(x) = délai de x secondes
+
+# Pourquoi utiliser fetchone() ?#
+# Parce que la requête SELECT id_player ... WHERE name_player = ? ne doit renvoyer qu’une seule ligne.
+# Ça évite de charger inutilement une liste avec fetchall()
