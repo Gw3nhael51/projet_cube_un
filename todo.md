@@ -7,11 +7,11 @@
 ## 🎮 Lancement du jeu
 - [X] Demander les pseudos des deux joueurs
 - [X] Verifier le format des pseudos
-- [] Vérifier si les pseudos existent dans la base SQLite
-- [] Enregistrer les pseudos manquants
+- [X] Vérifier si les pseudos existent dans la base SQLite
+- [X] Enregistrer les pseudos manquants
 
 ## 🗃️ Base de Données
-- [] Créer une base SQLite pour les tables :
+- [X] Créer une base SQLite pour les tables :
   - [X] `joueurs`
   - [X] `créatures`
   - [X] `historique`

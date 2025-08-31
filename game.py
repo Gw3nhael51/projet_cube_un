@@ -139,13 +139,12 @@ def main():
     c.close()
     conn.close()
 
-    # Description:
-    # time.sleep(x) = délai de x secondes
-
-
 # ---------------------------------------------------------
 # Exécution
 
 if __name__ == '__main__':
     get_connection()
     main()
+
+# Description:
+# time.sleep(x) = délai de x secondes
