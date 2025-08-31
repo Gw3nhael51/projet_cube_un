@@ -4,7 +4,7 @@ import sqlite3
 from pathlib import Path
 
 # On définit où sera créée la base de données (dans un dossier appelé database).
-DB_folder = Path(__file__).parent /'database'
+DB_folder = Path(__file__).parent
 DB_folder.mkdir(parents=True, exist_ok=True)
 
 DB_PATH = DB_folder / 'game.db'
