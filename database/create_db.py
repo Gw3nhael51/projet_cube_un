@@ -9,7 +9,7 @@ DB_folder.mkdir(parents=True, exist_ok=True)
 
 DB_PATH = DB_folder / 'game.db'
 
-def main():
+def create_db():
     # Connexion à SQLite (si le fichier n’existe pas, il sera créé automatiquement)
     con = sqlite3.connect(DB_PATH)
     con.execute("PRAGMA foreign_keys = ON") # IMPORTANT! PRAGMA foreign_keys = ON, doit être exécutée à chaque nouvelle connexion.
@@ -79,12 +79,13 @@ def main():
     """, players)
 
     # On valide les changements (commit) et on ferme la connexion
+    print("Database créée avec succès ✔️.")
     con.commit()
     con.close()
-    print(" Database créée avec succès ✔️.")
+    print("Déconnexion ✔️")
 
 if __name__ == "__main__":
-    main()
+    create_db()
 
 #Special_attacks :
 # Catalogue des attaques spéciales.
