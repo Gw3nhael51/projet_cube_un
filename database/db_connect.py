@@ -11,7 +11,9 @@ def get_connection():
     con = sqlite3.connect(DB_PATH)
     con.execute("PRAGMA foreign_keys = ON")
     cur = con.cursor()
+    print("DB connectée ✔️")
     return con, cur
+
 
 def database_connexion():
     try:

@@ -38,7 +38,7 @@ def get_or_create_player(numero_joueur):
 
         # Vérifier si le pseudo existe
         c.execute("SELECT id_player FROM players WHERE name_player = ?", (pseudo,))
-        row = c.fetchone()
+        row = c.fetchone() # sert à récupérer le prochain résultat d’une requête SQL exécuté
 
         # si SELECT sort un résultat ALORS pseudo existe DONC récupérer id_player
         if row:
@@ -143,7 +143,6 @@ def main():
 # Exécution
 
 if __name__ == '__main__':
-    get_connection()
     main()
 
 # Description:
