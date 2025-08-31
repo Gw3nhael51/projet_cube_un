@@ -10,7 +10,8 @@ c = sqliteConnection.cursor()
 def get_connection():
     con = sqlite3.connect(DB_PATH)
     con.execute("PRAGMA foreign_keys = ON")
-    return con
+    cur = con.cursor()
+    return con, cur
 
 def database_connexion():
     try:
