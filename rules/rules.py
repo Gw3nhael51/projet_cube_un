@@ -22,7 +22,7 @@ def rules():
     # Message de bienvenue aux deux joueurs, faire entrer pour faire afficher le message suivant
 
     # Afficher les règles
-    print("🐉 RÈGLES DU JEU — Combat de Créatures\n")
+    print("\n 🐉 RÈGLES DU JEU — Combat de Créatures\n")
     time.sleep(1)
 
     print("🎯 Objectif\n"

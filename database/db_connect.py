@@ -8,18 +8,12 @@ sqliteConnection = sqlite3.connect(DB_PATH)
 c = sqliteConnection.cursor()
 
 def get_connection():
-    con = sqlite3.connect(DB_PATH)
-    con.execute("PRAGMA foreign_keys = ON")
-    cur = con.cursor()
-    print("DB connectée ✔️")
-    return con, cur
-
-
-def database_connexion():
     try:
-        print('DB connectée ✔️ \n')
+        con = sqlite3.connect(DB_PATH)
+        con.execute("PRAGMA foreign_keys = ON")
+        cur = con.cursor()
+        print("DB connectée ✔️")
+        return con, cur
 
     except sqlite3.Error as error:
         print('Error occurred -', error)
-
-database_connexion()

@@ -87,7 +87,7 @@ def main():
     joueurs = pseudo_verify()
     player1, player2 = joueurs[0]['name'], joueurs[1]['name']
 
-    print(f"Bienvenue {player1} & {player2}")
+    print(f"Bienvenue {player1} & {player2} \n")
     rules()
 
     # -----------------------------------------------------
