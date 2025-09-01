@@ -7,20 +7,6 @@ from battle import *
 
 # Connexion acceptée, lancement du jeu
 
-# Fonction formule d'une attaque normale
-#   attack_player1 = damage_creature_player1 - defense_creature_player2
-#   attack_player2 = damage_creature_player2 - defense_creature_player1
-
-# Fonction formule d'attaque spéciale
-#   special_attack_player1 = damage_creature_player1 - defense_creature_player2 - PV > attaque normale
-#   special_attack_player2 = damage_creature_player2 - defense_creature_player1 - PV > attaque normale
-#   mais s'il y a régénération :
-#       special_attack_player1, special_attack_player2 = PV_actuel_du_joueur + PV_du_coup_spécial <= PV_max
-
-# Fonction passer son tour
-#   si tour = 0 , ne pas afficher l'option
-#   sinon attack_player = 0
-
 # ---------------------------------------------------------
 # Fonction utilitaire : get_or_create_player
 
@@ -66,7 +52,7 @@ def get_or_create_player(numero_joueur):
 def pseudo_verify():
 
     # Demande et valide les pseudos des deux joueurs, crée les entrées si besoin.
-    # Retourne une liste de deux dico: [{'id': , 'name': ...}, ...]
+    # Retourne une liste de deux dictionnaires : [{'id' :, 'name' : ...}, ...]
 
     global conn, c
     conn, c = get_connection()

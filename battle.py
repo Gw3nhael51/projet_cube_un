@@ -77,22 +77,36 @@ def attack(attacker: Fighter, defender: Fighter) -> str:
 def is_ko(f: Fighter) -> bool:
     return f.hp <= 0
 
+# Fonction formule d'une attaque normale
+#   attack_player1 = damage_creature_player1 - defense_creature_player2
+#   attack_player2 = damage_creature_player2 - defense_creature_player1
 
-    # while creature_player1.pv > 0 and creature_player2.pv > 0:
-    #     try:
-    #         # Affiche les PV creature_player1
-    #         # Demander l'attaque du Joueur 1: attaquer, capacité spéciale, passer son tour.
-    #         # - attaquer: utiliser la formule d'attaque normale
-    #         # - capacité spéciale: utiliser la formule d'attaque spéciale + contraintes PV/régénération
-    #         # - passer son tour: si tour > 0, attack_player = 0; sinon ne pas afficher l'option
-    #         # afficher le résumé du tour du joueur 1
-    #
-    #         # Affiche les PV creature_player2
-    #         # Demander l'attaque du Joueur 2:s attaquer, capacité spéciale, passer son tour.
-    #         # afficher le résumé du tour du joueur 2
-    #
-    #         # Incrémenter le compteur de tour
-    #         # tour += 1
-    #
-    #     except ValueError:
-    #         print("❌ Choisissez une attaque valide")
+# Fonction formule d'attaque spéciale
+#   special_attack_player1 = damage_creature_player1 - defense_creature_player2 - PV > attaque normale
+#   special_attack_player2 = damage_creature_player2 - defense_creature_player1 - PV > attaque normale
+#   mais s'il y a régénération :
+#       special_attack_player1, special_attack_player2 = PV_actuel_du_joueur + PV_du_coup_spécial <= PV_max
+
+# Fonction passer son tour
+#   si tour = 0 , ne pas afficher l'option
+#   sinon attack_player = 0
+
+
+# while creature_player1.pv > 0 and creature_player2.pv > 0:
+#     try:
+#         # Affiche les PV creature_player1
+#         # Demander l'attaque du Joueur 1: attaquer, capacité spéciale, passer son tour.
+#         # - attaquer: utiliser la formule d'attaque normale
+#         # - capacité spéciale: utiliser la formule d'attaque spéciale + contraintes PV/régénération
+#         # - passer son tour: si tour > 0, attack_player = 0; sinon ne pas afficher l'option
+#         # afficher le résumé du tour du joueur 1
+#
+#         # Affiche les PV creature_player2
+#         # Demander l'attaque du Joueur 2:s attaquer, capacité spéciale, passer son tour.
+#         # afficher le résumé du tour du joueur 2
+#
+#         # Incrémenter le compteur de tour
+#         # tour += 1
+#
+#     except ValueError:
+#         print("❌ Choisissez une attaque valide")
