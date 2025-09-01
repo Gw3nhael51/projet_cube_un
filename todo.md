@@ -21,10 +21,10 @@
 - [X] Afficher un message de bienvenue aux joueurs
 - [X] Afficher les règles du jeu et demander confirmation
 - [X] Demander d'accepter les règles du jeu
-- [🔄] Récupérer les créatures et leurs stats depuis la DB
-- [🔄] Afficher la liste des créatures disponibles
-- [] Empêcher le joueur 2 de choisir la même créature que le joueur 1
-- [🔄] Demander le choix de créature pour chaque joueur
+- [X] Récupérer les créatures et leurs stats depuis la DB
+- [X] Afficher la liste des créatures disponibles
+- [X] Empêcher le joueur 2 de choisir la même créature que le joueur 1
+- [X] Demander le choix de créature pour chaque joueur
 
 ## ⚔️ Combat Tour par Tour
 - [X] Créer une boucle de combat
