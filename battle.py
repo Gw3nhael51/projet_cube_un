@@ -1,75 +1,132 @@
-# battle.py
-from dataclasses import dataclass
+# battle.py — moteur de combat
+# Oui, c’est du tour par tour..
 
-@dataclass
-class Fighter:
-    name: str
-    hp: int
-    atk: int
-    df: int
-    spec_name: str
-    spec_val: int
-    spec_used: bool = False
-    burn_turns: int = 0
-    atk_mod: int = 0
-    guard: bool = False
+import sqlite3
+from create_db import DB_PATH
 
-    def base_damage(self, target_df: int) -> int:
-        return max(1, (self.atk + self.atk_mod) - target_df)
+# DB utils
+def get_creature_by_id(cid: int):
+    # Je vais chercher la créature en DB. Si elle n’existe pas, c’est pas moi, c’est la DB.
+    con = sqlite3.connect(DB_PATH)
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+    cur.execute("SELECT * FROM creatures WHERE id_creature = ?", (cid,))
+    row = cur.fetchone()
+    con.close()
+    return dict(row) if row else None
 
-def apply_special(attacker: Fighter, defender: Fighter) -> str:
-    s = attacker.spec_name.lower()
-    msg = ""
-    if "épée de l'enfer" in s:  # Démon
-        msg = f"{attacker.name} active {attacker.spec_name} (+{attacker.spec_val} dmg)"
-        attacker.atk_mod += attacker.spec_val
-    elif "rage" in s:           # Troll
-        msg = f"{attacker.name} entre en Rage (ATK x2 ce tour)"
-        attacker.atk_mod += attacker.atk  # +100%
-    elif "malédiction" in s:    # Sorcière
-        defender.atk_mod -= attacker.spec_val
-        msg = f"{defender.name} -{attacker.spec_val} ATK (2 tours)"
-    elif "soin magique" in s:   # Licorne
-        attacker.hp += attacker.spec_val
-        msg = f"{attacker.name} se soigne de {attacker.spec_val} PV"
-    elif "charge rapide" in s:  # Centaure
-        attacker.atk_mod += attacker.atk  # x2 sur ce coup
-        attacker.hp -= 3
-        msg = f"{attacker.name} charge (dégâts x2, -3 PV)"
-    elif "parade" in s:         # Guerrier noir
-        attacker.guard = True
-        msg = f"{attacker.name} se met en Parade (prochain coup bloqué)"
-    elif "souffle de feu" in s: # Dragon
-        attacker.atk_mod += attacker.spec_val
-        defender.burn_turns = max(defender.burn_turns, 2)
-        msg = f"{attacker.name} brûle l'ennemi (+{attacker.spec_val} dmg, brûlure)"
-    elif "appel de la meute" in s:  # Loup-garou
-        attacker.atk_mod += 2 * attacker.atk  # total ~ x3
-        msg = f"{attacker.name} multiplie ses dégâts (x3)"
-    elif "tir précis" in s:     # Elfe
-        defender.df = -10**6  # ignore la DEF en forçant le calcul
-        attacker.atk_mod += attacker.spec_val
-        msg = f"{attacker.name} tire précisément (8 dégâts vrais)"
-    attacker.spec_used = True
-    return msg
+def fighter_from_db(row: dict):
+    # Je convertis la ligne SQL en “fighter” prêt à se battre (et à souffrir).
+    return {
+        "id": row["id_creature"],
+        "name": row["name_creature"],
+        "hp": int(row["hp_initial"]),
+        "hp_max": int(row["hp_initial"]),
+        "atk": int(row["attack_value"]),
+        "def": int(row["defense_value"]),
+        "spec_name": row["spec_attack_name"] or "",
+        "spec_val": int(row["spec_attack_value"]) if str(row["spec_attack_value"]).isdigit() else 0,
+        "spec_used": False,   # spéciale = joker unique. Après, c’est fini les cadeaux.
+        "atk_mod": 0,         # petit bonus d’ATK si besoin (selon spé)
+        "shield_val": 0,      # bouclier ponctuel (merci “Parade Héroïque”)
+    }
 
-def attack(attacker: Fighter, defender: Fighter) -> str:
-    dmg = attacker.base_damage(defender.df)
-    if defender.guard:
-        defender.guard = False
-        dmg = 0
-        text = f"{attacker.name} attaque, mais {defender.name} pare tout !"
-    else:
-        defender.hp -= dmg
-        text = f"{attacker.name} inflige {dmg} dmg à {defender.name} (PV {defender.hp})"
-    # effets de fin de coup
-    if defender.burn_turns > 0:
-        defender.hp -= 3
-        defender.burn_turns -= 1
-        text += f" | Brûlure -3 (PV {defender.hp})"
-    # reset mod d'attaque temporaire
-    attacker.atk_mod = 0
-    return text
+# === Combat core =======================================================
+def calc_damage(attacker, defender):
+    # Formule de base : (ATK + bonus) - DEF, minimum 1.
+    # On ne fait pas 0 dmg ici : même un coup de fouet mouille… fait 1.
+    dmg = (attacker["atk"] + attacker["atk_mod"]) - defender["def"]
+    dmg = dmg if dmg > 0 else 1
 
-def is_ko(f: Fighter) -> bool:
-    return f.hp <= 0
+    # Si le défenseur a un shield : on sabre dedans, et on le consomme.
+    if defender["shield_val"] > 0:
+        old = dmg
+        dmg = max(1, dmg - defender["shield_val"])
+        defender["shield_val"] = 0
+
+    return dmg
+
+def do_attack(att, deff):
+    dmg = calc_damage(att, deff)
+    deff["hp"] -= dmg
+    return f"{att['name']} claque une attaque → {dmg} dégâts ! ({deff['name']} PV restants : {max(0,deff['hp'])})"
+
+def do_special(att, deff):
+    # La spéciale c’est comme un cheat code… mais on te le laisse qu’une fois.
+    if att["spec_used"]:
+        return "Capacité spéciale déjà utilisée. Il fallait cliquer plus tôt 😅"
+    att["spec_used"] = True
+
+    n, v = att["spec_name"], att["spec_val"]
+
+    if "Soin" in n:            # Licorne : chill vibes ✨
+        att["hp"] = min(att["hp_max"], att["hp"] + v)
+        return f"{att['name']} lance {n} (+{v} PV). On respire, on hydrate. PV={att['hp']}"
+
+    if "Parade" in n:          # Guerrier noir : “Nope.” au prochain coup
+        att["shield_val"] = 999
+        return f"{att['name']} prépare {n} (le prochain coup ? On l’appelle ‘rien du tout’)."
+
+    if "Charge" in n:          # Centaure : tape très fort, mais ça pique aussi
+        dmg = att["atk"] * 2
+        deff["hp"] -= dmg
+        att["hp"] -= 3
+        return f"{att['name']} fait {n} → {dmg} dégâts ! (et -3 PV en contre-coup, faut pas abuser non plus)"
+
+    if "Tir précis" in n:      # Elfe : ignore DEF, comme si l’autre n’avait jamais levé les bras
+        deff["hp"] -= v
+        return f"{att['name']} balance {n} → {v} dégâts garantis (DEF ignorée, ça fait mal à l’ego)."
+
+    # Par défaut : dégâts bruts (Démon, Dragon, etc.). Simple, efficace, barbare.
+    raw = max(1, v)
+    deff["hp"] -= raw
+    return f"{att['name']} utilise {n} → {raw} dégâts bruts. Le classique qui régale."
+
+def choose_action(player_name, fighter):
+    # Petit menu sans chichi. On aime les vrais choix : taper, tricher une fois, ou regarder le vent.
+    print(f"\n— {player_name} joue ({fighter['name']}) —  PV={fighter['hp']}/{fighter['hp_max']}  ATK={fighter['atk']}  DEF={fighter['def']}")
+    print("1. Attaquer")
+    print("2. Capacité spéciale")
+    print("3. Passer (tu es sûr·e ?)")
+    while True:
+        c = input("Choix: ").strip()
+        if c in ("1","2","3"):
+            return int(c)
+        print("Choix invalide, essaye 1/2/3. (Promis, il n’y avait pas de 4 caché.)")
+
+def battle_loop(p1_name, p2_name, f1, f2):
+    # Le ring est prêt : on alterne les baffes jusqu’à ce qu’il n’y ait plus de PV.
+    attacker, deff = f1, f2
+    owners = (p1_name, p2_name)
+
+    print("\n=== Début du combat ! Que le meilleur spammeur gagne. ===")
+
+    while f1["hp"] > 0 and f2["hp"] > 0:
+        action = choose_action(owners[0], attacker)
+
+        if action == 1:
+            msg = do_attack(attacker, deff)
+        elif action == 2:
+            msg = do_special(attacker, deff)
+        else:
+            msg = f"{owners[0]} passe son tour. (Stratégie mentale ou petite pause ? On respecte.)"
+
+        print(msg)
+
+        # Check fin
+        if deff["hp"] <= 0 or attacker["hp"] <= 0:
+            break
+
+        # On inverse les rôles comme dans une bonne prod : couplet 1 → couplet 2
+        attacker, deff = deff, attacker
+        owners = (owners[1], owners[0])
+
+    # Résultats : annonce officielle façon speaker
+    if f1["hp"] <= 0 and f2["hp"] <= 0:
+        print("\n💥 Double K.O. ! Match nul. Les deux aux urgences, personne n’a farmé d’XP.")
+        return 0
+    if f2["hp"] <= 0:
+        print(f"\n🏆 Victoire de {p1_name} avec {f1['name']} ! (Propre.)")
+        return 1
+    print(f"\n🏆 Victoire de {p2_name} avec {f2['name']} ! (Respect.)")
+    return 2
