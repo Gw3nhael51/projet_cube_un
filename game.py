@@ -93,10 +93,25 @@ def main():
     # -----------------------------------------------------
     # Récupérer dans la DB les créatures et les stats de chaque créature
 
-    # Afficher la liste des créatures disponibles et les stats, rendre indisponible
+    creatures = c.execute("SELECT name_creature, " # Recupere le nom
+                              "hp_initial, "
+                              "defense_value, "
+                              "spec_attack_name, "
+                              "spec_attack_value, "
+                              "spec_attack_descr "
+                          "FROM creatures"
+                        )
+
+    print("Liste des créatures disponibles: \n")
+    print("Nom creature, PV max, defense, nom attaque spéciale, attaque spéciale, déscription attaque spéciale")
+    for creature in creatures:
+        print(f"- {creature[0]}, {creature[1]}, {creature[2]}, {creature[3]}, {creature[4]}, {creature[5]}")
+
     # le choix des joueurs
     # Demander choix_creature joueur1
+
     # Demander choix_creature joueur2
+    # ne pas afficher la creature du joueur 1 dans la liste
 
     # Définir la variable tour à zéro
     tour = 0
