@@ -10,6 +10,7 @@
 - [] Vérifier si les pseudos existent dans la base SQLite
 - [] Enregistrer les pseudos manquants
 
+
 ## 🗃️ Base de Données
 - [] Créer une base SQLite pour les tables :
   - `joueurs`
