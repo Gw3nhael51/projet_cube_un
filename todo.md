@@ -7,24 +7,24 @@
 ## 🎮 Lancement du jeu
 - [X] Demander les pseudos des deux joueurs
 - [X] Verifier le format des pseudos
-- [] Vérifier si les pseudos existent dans la base SQLite
-- [] Enregistrer les pseudos manquants
-
+- [X] Vérifier si les pseudos existent dans la base SQLite
+- [X] Enregistrer les pseudos manquants
 
 ## 🗃️ Base de Données
-- [] Créer une base SQLite pour les tables :
-  - `joueurs`
-  - `créatures`
-  - `historique`
-- [] Concevoir le MCD (Modèle Conceptuel de Données)
+- [X] Créer une base SQLite pour les tables :
+  - [X] `joueurs`
+  - [X] `créatures`
+  - [X] `historique`
+  - [X] Concevoir le MCD (Modèle Conceptuel de Données)
 
 ## 🧠 Logique de jeu
 - [X] Afficher un message de bienvenue aux joueurs
 - [X] Afficher les règles du jeu et demander confirmation
-- [] Récupérer les créatures et leurs stats depuis la DB
-- [] Afficher la liste des créatures disponibles
+- [X] Demander d'accepter les règles du jeu
+- [🔄] Récupérer les créatures et leurs stats depuis la DB
+- [🔄] Afficher la liste des créatures disponibles
 - [] Empêcher le joueur 2 de choisir la même créature que le joueur 1
-- [] Demander le choix de créature pour chaque joueur
+- [🔄] Demander le choix de créature pour chaque joueur
 
 ## ⚔️ Combat Tour par Tour
 - [X] Créer une boucle de combat
@@ -39,15 +39,15 @@
 - [] Enregistrer l’historique du combat
 
 ## 🧪 Tests & Fiabilité
-- [] Vérifier que toutes les fonctionnalités fonctionnent sans érreur(s)
+- [🔄] Vérifier que toutes les fonctionnalités fonctionnent sans érreur(s)
 
 ## 📐 Diagrammes UML
-- [] Cas d’utilisation (choix créature, attaque, capacité spéciale)
-- [] Séquence (tour de combat)
+- [X] Cas d’utilisation (choix créature, attaque, capacité spéciale)
+- [X] Séquence (tour de combat)
 
 ## 🖼️ Maquettes d’écran
-- [] Écran de sélection des créatures
-- [🔄] Écran de combat (PV + options)
+- [X] Écran de sélection des créatures
+- [X] Écran de combat (PV + options)
 
 ## 📄 Spécifications Techniques
 - [] Décrire la formule de calcul des dégâts

@@ -1,135 +1,168 @@
-import random
-import sqlite3
-import time
+# game.py
+from database.db_connect import *
+from rules.rules import rules
+
+# -------------------Voir dans battle.py-------------------------
 
 # Connexion acceptée, lancement du jeu
 
-# Formule d'une attaque normale
-    # attack_player1 = damage_creature_player1 - defense_creature_player2
-    # attack_player2 = damage_creature_player2 - defense_creature_player1
+# Fonction formule d'une attaque normale
+#   attack_player1 = damage_creature_player1 - defense_creature_player2
+#   attack_player2 = damage_creature_player2 - defense_creature_player1
 
-# Formule d'attaque spéciale
-    # special_attack_player1 = damage_creature_player1 - defense_creature_player2 - PV > attaque normale
-    # special_attack_player2 = damage_creature_player2 - defense_creature_player1 - PV > attaque normale
+# Fonction formule d'attaque spéciale
+#   special_attack_player1 = damage_creature_player1 - defense_creature_player2 - PV > attaque normale
+#   special_attack_player2 = damage_creature_player2 - defense_creature_player1 - PV > attaque normale
+#   mais s'il y a régénération :
+#       special_attack_player1, special_attack_player2 = PV_actuel_du_joueur + PV_du_coup_spécial <= PV_max
 
-    # mais sil y a régénération
-        # special_attack_player1, special_attack_player2  =  PV actuel du joueur + PV du coup spécial <= PV max
+# Fonction passer son tour
+#   si tour = 0 , ne pas afficher l'option
+#   sinon attack_player = 0
 
-# passer son tour
-    # si tour = 0 , ne pas afficher l'option
-    # sinon attack_player = 0
+# ---------------------------------------------------------
+# Fonction utilitaire : get_or_create_player
 
-# Fonction de vérification des pseudos
+def get_or_create_player(numero_joueur):
+
+    # Demande un pseudo, vérifie le format, cherche dans la DB, crée si besoin.
+    # Retourne (id_player, pseudo).
+
+    while True:
+        pseudo = input(f"Quel est le pseudo du joueur {numero_joueur}? ").lower().replace(" ", "")
+
+        # Vérifier le format du pseudo
+        if not pseudo.isalpha():
+            print(f"❌ Le format de pseudo du joueur {numero_joueur} n'est pas correct")
+            continue
+
+        # Vérifier si le pseudo existe
+        c.execute("SELECT id_player FROM players WHERE name_player = ?", (pseudo,))
+        row = c.fetchone() # sert à récupérer le prochain résultat d’une requête SQL exécuté
+
+        # si SELECT sort un résultat ALORS pseudo existe DONC récupérer id_player
+        if row:
+            print("Votre pseudo existe")
+            id_player = row[0]
+            return id_player, pseudo
+
+        # Si le pseudo n'existe pas alors l'ajouter
+        print("Votre pseudo n'existe pas dans la base.")
+        print("Création du pseudo")
+        c.execute("INSERT OR IGNORE INTO players (name_player) VALUES (?)", (pseudo,))
+        conn.commit()  # commit sur la connexion
+        print("Pseudo enregistré ✔️")
+
+        # récupérer id_player créé
+        c.execute("SELECT id_player FROM players WHERE name_player = ?", (pseudo,))
+        id_player = c.fetchone()[0]
+        return id_player, pseudo
+
+
+# ---------------------------------------------------------
+# Fonction de vérification des pseudos (factorisée)
 
 def pseudo_verify():
-    while True:
-        # demander au joueur 1 son pseudo
-        pseudo1 = input("Quel est le pseudo du joueur 1? ").lower().replace(" ", "")
 
-        # Verifier le format du pseudo
-        if not pseudo1.isalpha():
-            print("❌ Le format de pseudo du joueur 1 n'est pas correct")
-            continue
+    # Demande et valide les pseudos des deux joueurs, crée les entrées si besoin.
+    # Retourne une liste de deux dico: [{'id': , 'name': ...}, ...]
 
-        # --------------------------------
+    global conn, c
+    conn, c = get_connection()
 
-        # demander au joueur 2 son pseudo
-        pseudo2 = input("Quel est le pseudo du joueur 2? ").lower().replace(" ", "")
+    joueurs = []
+    # demander au joueur 1 son pseudo puis au joueur 2 (même logique)
+    for numero_joueur in [1, 2]:
+        id_player, pseudo = get_or_create_player(numero_joueur)
+        joueurs.append({'id': id_player, 'name': pseudo})
 
-        # Verifier le format du pseudo
-        if not pseudo2.isalpha():
-            print("❌ Le format de pseudo du joueur 2 n'est pas correct")
-            continue
+    print("Le format des pseudos est correct.")
+    return joueurs
 
-        print("Le format des pseudos est correct.")
-        return pseudo1, pseudo2
+# ---------------------------------------------------------
+# Point d'entrée principal
 
+def main():
+    # Récupération/validation des pseudos
+    joueurs = pseudo_verify()
+    player1, player2 = joueurs[0]['name'], joueurs[1]['name']
 
-# Appel à la fonction
-player1, player2 = pseudo_verify()
+    print(f"Bienvenue {player1} & {player2} \n")
+    rules()
 
-# Message de bienvenue aux deux joueurs
-print(f"Bienvenue {player1} et {player2}")
-time.sleep(2)  # Attendre 2 secondes
+    # -----------------------------------------------------
+    # Récupérer dans la DB les créatures et les stats de chaque créature
 
-# Afficher les règles
-print("🐉 RÈGLES DU JEU — Combat de Créatures\n")
-time.sleep(1)
+    creatures = c.execute("SELECT name_creature, " # Recupere le nom
+                              "hp_initial, "
+                              "defense_value, "
+                              "spec_attack_name, "
+                              "spec_attack_value, "
+                              "spec_attack_descr "
+                          "FROM creatures"
+                        )
 
-print("🎯 Objectif\n"
-      "Affrontez votre adversaire dans un duel stratégique où chaque joueur incarne une créature aux pouvoirs uniques.\n"
-      "Le but ? Réduire les points de vie (PV) de la créature ennemie à zéro pour remporter la victoire.\n")
-time.sleep(12)
+    print("Liste des créatures disponibles: \n")
+    print("Nom creature, PV max, defense, nom attaque spéciale, attaque spéciale, déscription attaque spéciale")
+    for creature in creatures:
+        print(f"- {creature[0]}, {creature[1]}, {creature[2]}, {creature[3]}, {creature[4]}, {creature[5]}")
 
-print("🧙‍♂️ Mise en place\n"
-      "1. Chaque joueur choisit une créature parmi celles proposées.\n"
-      "2. Les créatures ont des caractéristiques propres :\n"
-      "   - Points de vie (PV)\n"
-      "   - Attaque\n"
-      "   - Défense\n"
-      "   - Capacité spéciale\n")
-time.sleep(12)
+    # le choix des joueurs
+    # Demander choix_creature joueur1
 
-print("🔁 Déroulement du jeu\n"
-      "Le jeu se joue en tour par tour. À chaque tour, le joueur actif choisit une action parmi trois :\n"
-      "   - Attaquer : inflige des dégâts à l’adversaire (Attaque - Défense adverse, minimum 1 dégât).\n"
-      "   - Utiliser sa capacité spéciale : soin, boost, rage, etc.\n"
-      "   - Passer son tour : aucune action n’est effectuée.\n")
-time.sleep(12)
+    # Demander choix_creature joueur2
+    # ne pas afficher la creature du joueur 1 dans la liste
 
-print("⚔️ Exemple d’actions\n"
-      "Le Dragon utilise son Souffle de feu pour infliger des dégâts massifs.\n"
-      "La Licorne se soigne grâce à sa Magie régénératrice.\n"
-      "Le Troll entre en Rage, augmentant temporairement son attaque.\n")
-time.sleep(12)
+    # Définir la variable tour à zéro
+    tour = 0
 
-print("🏁 Fin de partie\n"
-      "La partie se termine dès qu’une créature atteint 0 PV.\n"
-      "Le joueur dont la créature est encore en vie est déclaré vainqueur.\n")
-time.sleep(12)
+    # -----------------------------------------------------
+    # La partie peut commencer.
 
-print("📟 Interface console\n"
-      "Le jeu se joue via une interface en ligne de commande :\n"
-      "   - Sélection des créatures\n"
-      "   - Affichage des statistiques\n"
-      "   - Résumé des actions après chaque tour\n"
-      "   - Visibilité de l'historique de parties avec /history\n")
-time.sleep(12)
+    print("\n ---⚔️ Début du combat ⚔️---")
+    # Afficher le choix des créatures avec leur stats
+    # Player1 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
+    print(f"{player1}\n"
+          "VS\n"
+          f"{player2}\n")
 
-# Accepter les règles ?
+    # -----------------------------------------------------
+    # Boucle de combat voir code battle.py
 
-# Récupérer dans la DB les créatures et les stats de chaque créature
-# Afficher la liste des créatures disponibles et les stats, rendre indisponible
-# le choix des joueurs
-# Demander choix_creature joueur1
-# Demander choix_creature joueur2
-# Définir la variable tour à zéro
-tour = 0
+    # while creature_player1.pv > 0 and creature_player2.pv > 0:
+    #     try:
+    #         # Affiche les PV creature_player1
+    #         # Demander l'attaque du Joueur 1: attaquer, capacité spéciale, passer son tour.
+    #         # - attaquer: utiliser la formule d'attaque normale
+    #         # - capacité spéciale: utiliser la formule d'attaque spéciale + contraintes PV/régénération
+    #         # - passer son tour: si tour > 0, attack_player = 0; sinon ne pas afficher l'option
+    #         # afficher le résumé du tour du joueur 1
+    #
+    #         # Affiche les PV creature_player2
+    #         # Demander l'attaque du Joueur 2:s attaquer, capacité spéciale, passer son tour.
+    #         # afficher le résumé du tour du joueur 2
+    #
+    #         # Incrémenter le compteur de tour
+    #         # tour += 1
+    #
+    #     except ValueError:
+    #         print("❌ Choisissez une attaque valide")
 
-# La partie peut commencer.
-# Afficher --- Début du combat ---
-print("---⚔️ Début du combat ⚔️---")
-# Afficher le choix des créatures avec leur stats
-# Player1 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
-print(f"{player1}\n"
-      #Afficher VS
-      "VS\n"
-      # Afficher Player2 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
-      f"{player2}\n")
+    # -----------------------------------------------------
+    # Fin de partie: fermer proprement la DB
 
-#  while player1.pv > 0 and player2.pv > 0:
-# try:
-# Affiche les PV creature_player1
-# Demander l'attaque du Joueur 1:  attaquer, capacité spéciale, passer son tour.
+    c.close()
+    conn.close()
 
-# Affiche les PV creature_player2
-# Demander l'attaque du joueur 2:  attaquer, capacité spéciale, passer son tour.
+# ---------------------------------------------------------
+# Exécution
 
-# afficher le résumé des 2 attaques
-# continuer
-# except ValueError :
-# print("❌ Choisissez une attaque valide")
-
+if __name__ == '__main__':
+    main()
 
 # Description:
 # time.sleep(x) = délai de x secondes
+
+# Pourquoi utiliser fetchone() ?#
+# Parce que la requête SELECT id_player ... WHERE name_player = ? ne doit renvoyer qu’une seule ligne.
+# Ça évite de charger inutilement une liste avec fetchall()
