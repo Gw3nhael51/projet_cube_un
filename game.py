@@ -1,6 +1,7 @@
 # game.py
 from database.db_connect import *
 from rules.rules import rules
+from battle import *
 
 # -------------------Voir dans battle.py-------------------------
 
@@ -79,6 +80,25 @@ def pseudo_verify():
     print("Le format des pseudos est correct.")
     return joueurs
 
+def choose_creature(joueur_nom, creatures_disponibles):
+    print(f"\n--- {joueur_nom} --- \nchoisissez votre créature :")
+
+    for i, creature in enumerate(creatures_disponibles):
+        print(f"{i} - {creature['name_creature']} | PV: {creature['hp_initial']} "
+              f"| Défense: {creature['defense_value']} "
+              f"| Spéciale: {creature['spec_attack_name']} ({creature['spec_attack_value']})")
+
+    while True:
+        try:
+            choice = int(input("Entrez le numéro de votre créature : "))
+            if 0 <= choice < len(creatures_disponibles):
+                return creatures_disponibles.pop(choice)
+            else:
+                print("❌ Numéro invalide.")
+        except ValueError:
+            print("❌ Veuillez entrer un nombre.")
+
+
 # ---------------------------------------------------------
 # Point d'entrée principal
 
@@ -91,27 +111,33 @@ def main():
     rules()
 
     # -----------------------------------------------------
-    # Récupérer dans la DB les créatures et les stats de chaque créature
 
-    creatures = c.execute("SELECT name_creature, " # Recupere le nom
-                              "hp_initial, "
-                              "defense_value, "
-                              "spec_attack_name, "
-                              "spec_attack_value, "
-                              "spec_attack_descr "
-                          "FROM creatures"
-                        )
+    raw_creatures = c.execute(
+        "SELECT name_creature, hp_initial, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr FROM creatures").fetchall()
 
-    print("Liste des créatures disponibles: \n")
-    print("Nom creature, PV max, defense, nom attaque spéciale, attaque spéciale, déscription attaque spéciale")
-    for creature in creatures:
-        print(f"- {creature[0]}, {creature[1]}, {creature[2]}, {creature[3]}, {creature[4]}, {creature[5]}")
+    available_creatures = [
+        {
+            'name_creature':        row[0],
+            'hp_initial':           row[1],
+            'defense_value':        row[2],
+            'spec_attack_name':     row[3],
+            'spec_attack_value':    row[4],
+            'spec_attack_descr':    row[5]
+        }
 
-    # le choix des joueurs
-    # Demander choix_creature joueur1
+        for row in raw_creatures
+    ]
 
-    # Demander choix_creature joueur2
-    # ne pas afficher la creature du joueur 1 dans la liste
+    creature_player1 = choose_creature(player1, available_creatures)
+    # print(f"Liste après choix de {player1} : {[c['name_creature'] for c in available_creatures]}")
+
+    creature_player2 = choose_creature(player2, available_creatures)
+    # print(f"Liste après choix de {player2} : {[c['name_creature'] for c in available_creatures]}")
+
+    fight = [
+        f"{player1}: a choisi {creature_player1['name_creature']} voici ses stats: PV: {creature_player1['hp_initial']}, Défense: {creature_player1['defense_value']}, Spéciale: {creature_player1['spec_attack_name']} - {creature_player1['spec_attack_descr']}",
+        f"{player2}: a choisi {creature_player2['name_creature']} voici ses stats: PV: {creature_player2['hp_initial']}, Défense: {creature_player2['defense_value']}, Spéciale: {creature_player2['spec_attack_name']} - {creature_player2['spec_attack_descr']}"
+    ]
 
     # Définir la variable tour à zéro
     tour = 0
@@ -122,31 +148,11 @@ def main():
     print("\n ---⚔️ Début du combat ⚔️---")
     # Afficher le choix des créatures avec leur stats
     # Player1 : Nom - PV - Puissance d'attaque - Défense - Capacité Spéciale
-    print(f"{player1}\n"
-          "VS\n"
-          f"{player2}\n")
+    print(f"{fight[0]}\n🆚\n{fight[1]}\n")
 
     # -----------------------------------------------------
     # Boucle de combat voir code battle.py
 
-    # while creature_player1.pv > 0 and creature_player2.pv > 0:
-    #     try:
-    #         # Affiche les PV creature_player1
-    #         # Demander l'attaque du Joueur 1: attaquer, capacité spéciale, passer son tour.
-    #         # - attaquer: utiliser la formule d'attaque normale
-    #         # - capacité spéciale: utiliser la formule d'attaque spéciale + contraintes PV/régénération
-    #         # - passer son tour: si tour > 0, attack_player = 0; sinon ne pas afficher l'option
-    #         # afficher le résumé du tour du joueur 1
-    #
-    #         # Affiche les PV creature_player2
-    #         # Demander l'attaque du Joueur 2:s attaquer, capacité spéciale, passer son tour.
-    #         # afficher le résumé du tour du joueur 2
-    #
-    #         # Incrémenter le compteur de tour
-    #         # tour += 1
-    #
-    #     except ValueError:
-    #         print("❌ Choisissez une attaque valide")
 
     # -----------------------------------------------------
     # Fin de partie: fermer proprement la DB

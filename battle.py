@@ -17,6 +17,7 @@ class Fighter:
     def base_damage(self, target_df: int) -> int:
         return max(1, (self.atk + self.atk_mod) - target_df)
 
+# Fonction attaques spéciales
 def apply_special(attacker: Fighter, defender: Fighter) -> str:
     s = attacker.spec_name.lower()
     msg = ""
@@ -53,6 +54,7 @@ def apply_special(attacker: Fighter, defender: Fighter) -> str:
     attacker.spec_used = True
     return msg
 
+# Fonction attaque normale
 def attack(attacker: Fighter, defender: Fighter) -> str:
     dmg = attacker.base_damage(defender.df)
     if defender.guard:
@@ -71,5 +73,26 @@ def attack(attacker: Fighter, defender: Fighter) -> str:
     attacker.atk_mod = 0
     return text
 
+# Si l'une des creatures est a 0 PV
 def is_ko(f: Fighter) -> bool:
     return f.hp <= 0
+
+
+    # while creature_player1.pv > 0 and creature_player2.pv > 0:
+    #     try:
+    #         # Affiche les PV creature_player1
+    #         # Demander l'attaque du Joueur 1: attaquer, capacité spéciale, passer son tour.
+    #         # - attaquer: utiliser la formule d'attaque normale
+    #         # - capacité spéciale: utiliser la formule d'attaque spéciale + contraintes PV/régénération
+    #         # - passer son tour: si tour > 0, attack_player = 0; sinon ne pas afficher l'option
+    #         # afficher le résumé du tour du joueur 1
+    #
+    #         # Affiche les PV creature_player2
+    #         # Demander l'attaque du Joueur 2:s attaquer, capacité spéciale, passer son tour.
+    #         # afficher le résumé du tour du joueur 2
+    #
+    #         # Incrémenter le compteur de tour
+    #         # tour += 1
+    #
+    #     except ValueError:
+    #         print("❌ Choisissez une attaque valide")
