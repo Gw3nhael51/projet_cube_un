@@ -16,4 +16,4 @@ def get_connection():
         return con, cur
 
     except sqlite3.Error as error:
-        print('Error occurred -', error)
+        print('Erreur -', error)
