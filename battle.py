@@ -1,6 +1,5 @@
 # battle.py — moteur de combat
-# Oui, c'est du tour par tour...
-
+# Oui, c'est du tour par tour..
 import sqlite3
 from database.create_db import DB_PATH
 
@@ -9,6 +8,7 @@ def safe_int(val):
         return int(val)
     except (ValueError, TypeError):
         return 0  # ou une valeur par défaut
+
 
 # DB utils
 def get_creature_by_id(cid: int):
@@ -27,17 +27,18 @@ def fighter_from_db(row):
         "name": row.get("name_creature", "Inconnu"),
         "hp": int(row.get("hp_initial", 100)),
         "hp_max": int(row.get("hp_initial", 100)),
-        "hp_initial": int(row.get("hp_initial", 100)),
-        "atk": int(row.get("attack_value", 5)),
+        "hp_initial": int(row.get("hp_initial", 100)),  # AJOUTÉ
+        "atk": int(row.get("attack_value", 5)),         # AJOUTÉ
         "def": int(row.get("defense_value", 10)),
         "special": row.get("spec_attack_name", None),
-        "spec_name": row.get("spec_attack_name", None),
+        "spec_name": row.get("spec_attack_name", None), # AJOUTÉ
         "spec_value": int(row.get("spec_attack_value", 0)),
         "spec_descr": row.get("spec_attack_descr", ""),
         "spec_used": False,
         "atk_mod": 1.0,
         "shield_val": 0
     }
+
 
 # === Combat core =======================================================
 def calc_damage(attacker, defender):
@@ -162,11 +163,23 @@ def battle_loop(p1_name, p2_name, f1, f2):
         return 0
     elif f2["hp"] <= 0:
         print(f"\n🏆 Victoire de {p1_name} avec {f1['name']} ! (Propre.)")
+        # Enregistrer la victoire dans l'historique
+        try:
+            from history import new_history
+            new_history(p1_name, f1["id"])
+        except Exception as e:
+            print(f"⚠️ Erreur sauvegarde historique: {e}")
         return 1
     else:
         print(f"\n🏆 Victoire de {p2_name} avec {f2['name']} ! (Respect.)")
+        # Enregistrer la victoire dans l'historique
+        try:
+            from history import new_history
+            new_history(p2_name, f2["id"])
+        except Exception as e:
+            print(f"⚠️ Erreur sauvegarde historique: {e}")
         return 2
 
-# pour backtester
+
 if __name__ == '__main__':
     battle_loop(p1_name="Jean", p2_name="Jacques", f1=fighter_from_db(get_creature_by_id(1)), f2=fighter_from_db(get_creature_by_id(2)))

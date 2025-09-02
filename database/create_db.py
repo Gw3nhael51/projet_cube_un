@@ -101,7 +101,6 @@ def create_db():
     con.close()
     print("Déconnexion ✔️")
 
-
 if __name__ == "__main__":
     create_db()
 
