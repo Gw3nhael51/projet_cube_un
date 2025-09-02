@@ -2,7 +2,7 @@
 from database.db_connect import *
 from rules.rules import rules
 from battle import *
-
+from history import show_history
 # -------------------Voir dans battle.py-------------------------
 
 # Connexion acceptée, lancement du jeu
