@@ -146,3 +146,6 @@ def battle_loop(p1_name, p2_name, f1, f2):
         return 1
     print(f"\n🏆 Victoire de {p2_name} avec {f2['name']} ! (Respect.)")
     return 2
+
+if __name__ == '__main__':
+    battle_loop(p1_name="Jean", p2_name="Jacques", f1=fighter_from_db(get_creature_by_id(1)), f2=fighter_from_db(get_creature_by_id(2)))

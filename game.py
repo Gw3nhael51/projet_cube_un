@@ -1,7 +1,7 @@
 # game.py
 from database.db_connect import *
 from rules.rules import rules
-from battle import *
+from battle import battle_loop
 
 # -------------------Voir dans battle.py-------------------------
 
@@ -138,7 +138,7 @@ def main():
 
     # -----------------------------------------------------
     # Boucle de combat voir code battle.py
-
+    battle_loop(p1_name=player1, p2_name=player2, f1=creature_player1, f2=creature_player2)
 
     # -----------------------------------------------------
     # Fin de partie: fermer proprement la DB

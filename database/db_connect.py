@@ -1,7 +1,6 @@
-# connexion à la base de données db_connect.py
-
+# db_connect.py
 import sqlite3
-from database.create_db import DB_PATH # import de la var DB_PATH depuis create_db.py
+from database.create_db import DB_PATH
 
 sqliteConnection = sqlite3.connect(DB_PATH)
 # Se connecter à la base de données et créer un cursor dans le bon chemin
@@ -9,11 +8,14 @@ c = sqliteConnection.cursor()
 
 def get_connection():
     try:
-        con = sqlite3.connect(DB_PATH)
-        con.execute("PRAGMA foreign_keys = ON")
-        cur = con.cursor()
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute("PRAGMA foreign_keys = ON")
+        cursor = conn.cursor()
         print("DB connectée ✔️")
-        return con, cur
-
+        return conn, cursor
     except sqlite3.Error as error:
-        print('Erreur -', error)
+        print("Erreur de connexion à la base :", error)
+        return None, None
+
+if __name__ == '__main__':
+    get_connection()
