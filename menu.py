@@ -1,3 +1,4 @@
+#menu
 from game import main      # la fonction principale (démarrer une partie)
 from history import show_history
 
