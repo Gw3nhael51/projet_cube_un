@@ -1,13 +1,18 @@
 from game import main      # la fonction principale (démarrer une partie)
 from history import show_history
+import pyfiglet
+from termcolor import colored
 
 def main_menu():
-  
+
     #Menu principal :
       #1) Démarrer le jeu (appelle game.main())
       #2) Regarder l'historique (appelle history.show_history())
- 
+
     while True:
+        print("-------------------------------------------------------------------------")
+        title = pyfiglet.figlet_format("MONSTER BEATS", font="slant")
+        print(colored(title, "blue"))
         print("\n=== Menu principal ===")
         print("1) Démarrer le jeu")
         print("2) Regarder l'historique")

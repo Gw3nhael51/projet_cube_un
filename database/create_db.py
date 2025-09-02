@@ -11,7 +11,7 @@ DB_PATH = DB_folder / 'game.db'
 
 
 def create_db():
-    # Connexion à SQLite (si le fichier n’existe pas, il sera créé automatiquement)
+    # Connexion à SQLite (si le fichier n'existe pas, il sera créé automatiquement)
     con = sqlite3.connect(DB_PATH)
     con.execute(
         "PRAGMA foreign_keys = ON")  # IMPORTANT! PRAGMA foreign_keys = ON, doit être exécutée à chaque nouvelle connexion.
@@ -25,14 +25,14 @@ def create_db():
         CREATE TABLE IF NOT EXISTS creatures (
             id_creature INTEGER PRIMARY KEY AUTOINCREMENT,
             name_creature TEXT UNIQUE,
-            hp_initial TEXT, 
+            hp_initial INTEGER, 
             attack_value INTEGER,
             defense_value INTEGER,
             spec_attack_name TEXT,
-            spec_attack_value TEXT,
+            spec_attack_value INTEGER,
             spec_attack_descr TEXT
         );
-        
+
         -- Créer la table des joueurs
 
         CREATE TABLE IF NOT EXISTS players (
@@ -41,9 +41,9 @@ def create_db():
             id_creature INTEGER,
             FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
         );
-        
+
         -- Créer la table de l'historique de combats
-        
+
         CREATE TABLE IF NOT EXISTS history (
             id_battle INTEGER PRIMARY KEY AUTOINCREMENT,
             id_player_winner INTEGER,
@@ -52,9 +52,9 @@ def create_db():
             FOREIGN KEY (id_player_winner) REFERENCES players(id_player),
             FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
         );
-        
+
         -- Créer la table du Code pin pour auth_user
-        
+
         CREATE TABLE IF NOT EXISTS pin (
             id_pin INTEGER PRIMARY KEY AUTOINCREMENT,
             pin TEXT,
@@ -67,7 +67,7 @@ def create_db():
     # Liste des créatures jouables
     creatures = [
         #   (name_creature, hp_initial, attack_value, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr)
-        ("Démon", 45, 10, 4, "Épée de l'Enfer", "20", "Inflige des dégâts massifs"),
+        ("Démon", 45, 10, 4, "Épée de l'Enfer", 20, "Inflige des dégâts massifs"),
         ("Troll", 60, 6, 6, "Rage", 15, "Double l'attaque pendant un tour"),
         ("Sorcière", 35, 11, 4, "Malédiction", 3, "Réduit l'attaque de l'adversaire de -3PV pendant 2 tours"),
         ("Licorne", 40, 8, 8, "Soin magique", 10, "Restaure de 10 PV, utilisable une fois"),
@@ -75,7 +75,7 @@ def create_db():
         ("Guerrier noir", 55, 8, 7, "Parade Héroïque", 0, "Bloque l'attaque complète au prochain tour"),
         ("Dragon", 50, 10, 5, "Souffle de feu", 30, "Brûle l'ennemi, perte de vie a l'ennemi en plus part tour"),
         ("Loup-garou", 45, 9, 6, "Appel de la meute", 3, "Inflige un dégât multiplié par 3"),
-        ("Elfe", 40, 9, 5, "Tir précis", 8, "Inflige 8 dégâts garantis en ignorant la défense de l’adversaire.")
+        ("Elfe", 40, 9, 5, "Tir précis", 8, "Inflige 8 dégâts garantis en ignorant la défense de l'adversaire.")
     ]
 
     cur.executemany("""

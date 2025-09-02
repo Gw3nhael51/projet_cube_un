@@ -32,11 +32,11 @@
   - Attaquer
   - Capacité spéciale
   - Passer son tour (sauf tour1)
-- [] Calculer les dégâts : `Attaque - Défense (min 1)`
-- [] Afficher les PV restants après chaque tour
-- [] Déterminer la fin de partie (PV = 0)
-- [] Afficher le gagnant avec le résumé du combat
-- [] Enregistrer l’historique du combat
+- [X] Calculer les dégâts : `Attaque - Défense (min 1)`
+- [X] Afficher les PV restants après chaque tour
+- [X] Déterminer la fin de partie (PV = 0)
+- [X] Afficher le gagnant avec le résumé du combat
+- [🔄] Enregistrer l’historique du combat
 
 ## 🧪 Tests & Fiabilité
 - [🔄] Vérifier que toutes les fonctionnalités fonctionnent sans érreur(s)
@@ -55,6 +55,6 @@
 - [] Décrire les règles de fin de partie
 
 ## 🗣️ Soutenance
-- [] Préparer une présentation de 15 minutes
+- [🔄] Préparer une présentation de 15 minutes
+- [🔄] Présenter le fonctionnement de la base de données
 - [] Démonstration du jeu en console
-- [] Présenter le fonctionnement de la base de données

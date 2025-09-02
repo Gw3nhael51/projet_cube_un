@@ -2,10 +2,6 @@
 import sqlite3
 from database.create_db import DB_PATH
 
-sqliteConnection = sqlite3.connect(DB_PATH)
-# Se connecter à la base de données et créer un cursor dans le bon chemin
-c = sqliteConnection.cursor()
-
 def get_connection():
     try:
         conn = sqlite3.connect(DB_PATH)
@@ -17,5 +13,15 @@ def get_connection():
         print("Erreur de connexion à la base :", error)
         return None, None
 
+# Variables globales pour compatibilité avec le code existant
+def init_global_connection():
+    global sqliteConnection, c
+    sqliteConnection, c = get_connection()
+    return sqliteConnection, c
+
+# Initialisation par défaut
+sqliteConnection, c = init_global_connection()
+
+# test unitaire
 if __name__ == '__main__':
     get_connection()

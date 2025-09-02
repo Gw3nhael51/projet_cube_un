@@ -1,6 +1,7 @@
 # game.py
 from database.db_connect import *
 from rules.rules import rules
+from battle import fighter_from_db
 from battle import battle_loop
 
 # -------------------Voir dans battle.py-------------------------
@@ -99,34 +100,29 @@ def main():
     # -----------------------------------------------------
 
     raw_creatures = c.execute(
-        "SELECT name_creature, hp_initial, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr FROM creatures").fetchall()
+        "SELECT id_creature, name_creature, hp_initial, defense_value, spec_attack_name, spec_attack_value, spec_attack_descr FROM creatures"
+    ).fetchall()
 
     available_creatures = [
         {
-            'name_creature':        row[0],
-            'hp_initial':           row[1],
-            'defense_value':        row[2],
-            'spec_attack_name':     row[3],
-            'spec_attack_value':    row[4],
-            'spec_attack_descr':    row[5]
+            'id_creature': row[0],
+            'name_creature': row[1],
+            'hp_initial': int(row[2]),
+            'defense_value': int(row[3]),
+            'spec_attack_name': row[4],
+            'spec_attack_value': int(row[5]),
+            'spec_attack_descr': row[6]
         }
-
         for row in raw_creatures
     ]
 
     creature_player1 = choose_creature(player1, available_creatures)
-    # print(f"Liste après choix de {player1} : {[c['name_creature'] for c in available_creatures]}")
-
     creature_player2 = choose_creature(player2, available_creatures)
-    # print(f"Liste après choix de {player2} : {[c['name_creature'] for c in available_creatures]}")
 
     fight = [
         f"{player1}: a choisi {creature_player1['name_creature']} voici ses stats: PV: {creature_player1['hp_initial']}, Défense: {creature_player1['defense_value']}, Spéciale: {creature_player1['spec_attack_name']} - {creature_player1['spec_attack_descr']}",
         f"{player2}: a choisi {creature_player2['name_creature']} voici ses stats: PV: {creature_player2['hp_initial']}, Défense: {creature_player2['defense_value']}, Spéciale: {creature_player2['spec_attack_name']} - {creature_player2['spec_attack_descr']}"
     ]
-
-    # Définir la variable tour à zéro
-    tour = 0
 
     # -----------------------------------------------------
     # La partie peut commencer.
@@ -137,7 +133,10 @@ def main():
     print(f"{fight[0]}\n🆚\n{fight[1]}\n")
 
     # -----------------------------------------------------
-    # Boucle de combat voir code battle.py
+    # Boucle de combat from battle.py
+    creature_player1 = fighter_from_db(creature_player1)
+    creature_player2 = fighter_from_db(creature_player2)
+
     battle_loop(p1_name=player1, p2_name=player2, f1=creature_player1, f2=creature_player2)
 
     # -----------------------------------------------------
@@ -147,8 +146,7 @@ def main():
     conn.close()
 
 # ---------------------------------------------------------
-# Exécution
-
+# Exécuter
 if __name__ == '__main__':
     main()
 

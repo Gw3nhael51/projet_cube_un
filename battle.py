@@ -1,11 +1,18 @@
 # battle.py — moteur de combat
-# Oui, c’est du tour par tour..
+# Oui, c'est du tour par tour...
+
 import sqlite3
 from database.create_db import DB_PATH
 
+def safe_int(val):
+    try:
+        return int(val)
+    except (ValueError, TypeError):
+        return 0  # ou une valeur par défaut
+
 # DB utils
 def get_creature_by_id(cid: int):
-    # Je vais chercher la créature en DB. Si elle n’existe pas, c’est pas moi, c’est la DB.
+    # Je vais chercher la créature en DB. Si elle n'existe pas, c'est pas moi, c'est la DB.
     con = sqlite3.connect(DB_PATH)
     con.row_factory = sqlite3.Row
     cur = con.cursor()
@@ -14,20 +21,22 @@ def get_creature_by_id(cid: int):
     con.close()
     return dict(row) if row else None
 
-def fighter_from_db(row: dict):
-    # Je convertis la ligne SQL en “fighter” prêt à se battre (et à souffrir).
+def fighter_from_db(row):
     return {
-        "id": row["id_creature"],
-        "name": row["name_creature"],
-        "hp": int(row["hp_initial"]),
-        "hp_max": int(row["hp_initial"]),
-        "atk": int(row["attack_value"]),
-        "def": int(row["defense_value"]),
-        "spec_name": row["spec_attack_name"] or "",
-        "spec_val": int(row["spec_attack_value"]) if str(row["spec_attack_value"]).isdigit() else 0,
-        "spec_used": False,   # spéciale = joker unique. Après, c’est fini les cadeaux.
-        "atk_mod": 0,         # petit bonus d’ATK si besoin (selon spé)
-        "shield_val": 0,      # bouclier ponctuel (merci “Parade Héroïque”)
+        "id": row.get("id_creature", None),
+        "name": row.get("name_creature", "Inconnu"),
+        "hp": int(row.get("hp_initial", 100)),
+        "hp_max": int(row.get("hp_initial", 100)),
+        "hp_initial": int(row.get("hp_initial", 100)),
+        "atk": int(row.get("attack_value", 5)),
+        "def": int(row.get("defense_value", 10)),
+        "special": row.get("spec_attack_name", None),
+        "spec_name": row.get("spec_attack_name", None),
+        "spec_value": int(row.get("spec_attack_value", 0)),
+        "spec_descr": row.get("spec_attack_descr", ""),
+        "spec_used": False,
+        "atk_mod": 1.0,
+        "shield_val": 0
     }
 
 # === Combat core =======================================================
@@ -51,20 +60,20 @@ def do_attack(att, deff):
     return f"{att['name']} claque une attaque → {dmg} dégâts ! ({deff['name']} PV restants : {max(0,deff['hp'])})"
 
 def do_special(att, deff):
-    # La spéciale c’est comme un cheat code… mais on te le laisse qu’une fois.
+    # La spéciale c'est comme un cheat code… mais on te le laisse qu'une fois.
     if att["spec_used"]:
         return "Capacité spéciale déjà utilisée. Il fallait cliquer plus tôt 😅"
     att["spec_used"] = True
 
-    n, v = att["spec_name"], att["spec_val"]
+    n, v = att["spec_name"], att["spec_value"]
 
     if "Soin" in n:            # Licorne : chill vibes ✨
         att["hp"] = min(att["hp_max"], att["hp"] + v)
         return f"{att['name']} lance {n} (+{v} PV). On respire, on hydrate. PV={att['hp']}"
 
-    if "Parade" in n:          # Guerrier noir : “Nope.” au prochain coup
+    if "Parade" in n:          # Guerrier noir : "Nope." au prochain coup
         att["shield_val"] = 999
-        return f"{att['name']} prépare {n} (le prochain coup ? On l’appelle ‘rien du tout’)."
+        return f"{att['name']} prépare {n} (le prochain coup ? On l'appelle 'rien du tout')."
 
     if "Charge" in n:          # Centaure : tape très fort, mais ça pique aussi
         dmg = att["atk"] * 2
@@ -72,9 +81,9 @@ def do_special(att, deff):
         att["hp"] -= 3
         return f"{att['name']} fait {n} → {dmg} dégâts ! (et -3 PV en contre-coup, faut pas abuser non plus)"
 
-    if "Tir précis" in n:      # Elfe : ignore DEF, comme si l’autre n’avait jamais levé les bras
+    if "Tir précis" in n:      # Elfe : ignore DEF, comme si l'autre n'avait jamais levé les bras
         deff["hp"] -= v
-        return f"{att['name']} balance {n} → {v} dégâts garantis (DEF ignorée, ça fait mal à l’ego)."
+        return f"{att['name']} balance {n} → {v} dégâts garantis (DEF ignorée, ça fait mal à l'ego)."
 
     # Par défaut : dégâts bruts (Démon, Dragon, etc.). Simple, efficace, barbare.
     raw = max(1, v)
@@ -83,7 +92,7 @@ def do_special(att, deff):
 
 
 def choose_action(player_name, fighter, allow_pass: bool, allow_special: bool):
-    # Menu dynamique : on n’affiche que ce qui est autorisé
+    # Menu dynamique : on n'affiche que ce qui est autorisé
     print(
         f"\n— {player_name} joue ({fighter['name']}) —  PV={fighter['hp']}/{fighter['hp_max']}  ATK={fighter['atk']}  DEF={fighter['def']}")
 
@@ -110,16 +119,25 @@ def choose_action(player_name, fighter, allow_pass: bool, allow_special: bool):
 
 
 def battle_loop(p1_name, p2_name, f1, f2):
-    # Le ring est prêt : on alterne les baffes jusqu’à ce qu’il n’y ait plus de PV.
+    turn_idx = 0  # Compteur de tours
     attacker, deff = f1, f2
     owners = (p1_name, p2_name)
 
-    print("\n=== Début du combat ! Que le meilleur spammeur gagne. ===")
+    # Initialisation des PV actuels
+    f1["hp"] = f1["hp_initial"]
+    f2["hp"] = f2["hp_initial"]
 
-    while f1["hp_initial"] > 0 and f2["hp_initial"] > 0:
+    print("\n=== ⚔️ Début du combat ! Que le meilleur spammeur gagne. ⚔️ ===")
+
+    while f1["hp"] > 0 and f2["hp"] > 0:
+        print(f"\n🎯 Tour {turn_idx + 1}")
         allow_pass = (turn_idx > 1)
         allow_special = (not attacker["spec_used"])
 
+        # Choix de l'action
+        action = choose_action(owners[0], attacker, allow_pass, allow_special)
+
+        # Exécution de l'action
         if action == 1:
             msg = do_attack(attacker, deff)
         elif action == 2:
@@ -129,23 +147,26 @@ def battle_loop(p1_name, p2_name, f1, f2):
 
         print(msg)
 
-        # Check fin
-        if deff["hp_initial"] <= 0 or attacker["hp_initial"] <= 0:
+        # Vérification de fin de combat
+        if deff["hp"] <= 0 or attacker["hp"] <= 0:
             break
 
-        # On inverse les rôles comme dans une bonne prod : couplet 1 → couplet 2
+        # Inversion des rôles
         attacker, deff = deff, attacker
         owners = (owners[1], owners[0])
+        turn_idx += 1
 
-    # Résultats : annonce officielle façon speaker
-    if f1["hp_initial"] <= 0 and f2["hp_initial"] <= 0:
-        print("\n💥 Double K.O. ! Match nul. Les deux aux urgences, personne n’a farmé d’XP.")
+    # Résultat final
+    if f1["hp"] <= 0 and f2["hp"] <= 0:
+        print("\n💥 Double K.O. ! Match nul. Les deux aux urgences, personne n'a farmé d'XP.")
         return 0
-    if f2["hp"] <= 0:
+    elif f2["hp"] <= 0:
         print(f"\n🏆 Victoire de {p1_name} avec {f1['name']} ! (Propre.)")
         return 1
-    print(f"\n🏆 Victoire de {p2_name} avec {f2['name']} ! (Respect.)")
-    return 2
+    else:
+        print(f"\n🏆 Victoire de {p2_name} avec {f2['name']} ! (Respect.)")
+        return 2
 
+# pour backtester
 if __name__ == '__main__':
     battle_loop(p1_name="Jean", p2_name="Jacques", f1=fighter_from_db(get_creature_by_id(1)), f2=fighter_from_db(get_creature_by_id(2)))
