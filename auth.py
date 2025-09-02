@@ -51,7 +51,7 @@ def verification():
         if hash_password(pwd) == stored_hash:
             print("✅ Lancement du jeu...")
             time.sleep(2)
-            print("🎮 Ouverture du Jeu")
+            print("🎮 Ouverture du Menu")
             os.system("python game.py")
             break
         else:
