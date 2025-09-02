@@ -13,7 +13,7 @@ def main_menu():
         print("-------------------------------------------------------------------------")
         title = pyfiglet.figlet_format("MONSTER BEATS", font="slant")
         print(colored(title, "blue"))
-        print("\n=== Menu principal ===")
+        print(pyfiglet.figlet_format("=== Menu ===", "slant"))
         print("1) Démarrer le jeu")
         print("2) Regarder l'historique")
 
@@ -27,7 +27,6 @@ def main_menu():
         # Ici 10 derniers combats sont affichés
             show_history(limit=10) # Verifier si history est vide --> afficher message si vide,
         # sinon afficher les 10 derniers combats
-
         else:
             print("❌ Choix invalide, réessayez.")
 

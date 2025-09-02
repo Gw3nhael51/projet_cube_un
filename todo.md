@@ -39,7 +39,7 @@
 - [🔄] Enregistrer l’historique du combat
 
 ## 🧪 Tests & Fiabilité
-- [🔄] Vérifier que toutes les fonctionnalités fonctionnent sans érreur(s)
+- [X] Vérifier que toutes les fonctionnalités fonctionnent sans érreur(s)
 
 ## 📐 Diagrammes UML
 - [X] Cas d’utilisation (choix créature, attaque, capacité spéciale)

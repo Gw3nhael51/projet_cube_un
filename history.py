@@ -1,9 +1,11 @@
 import sqlite3
 from database.db_connect import get_connection, DB_PATH
 from datetime import datetime
+import pyfiglet
+from termcolor import colored
+from rules.rules import wait_enter
 
 get_connection()
-
 
 def show_history(limit=10):
     conn = sqlite3.connect(DB_PATH)
@@ -23,7 +25,8 @@ def show_history(limit=10):
               """, (limit,))
     rows = cur.fetchall()
 
-    print(f"\n ---Historique de combats ---\n")
+    history_text = pyfiglet.figlet_format(" --Historique--", font="slant")
+    print(colored(history_text, "red"))
     if not rows:
         print("(aucun combat enregistré)")
     else:
@@ -31,7 +34,7 @@ def show_history(limit=10):
             print(f"#{row[0]} | {row[1]} | Vainqueur: {row[2]} | Créature: {row[3]}")
 
     conn.close()
-
+    wait_enter()
 
 def new_history(player_name, creature_id):
     """Enregistre une nouvelle bataille avec le nom du joueur gagnant"""

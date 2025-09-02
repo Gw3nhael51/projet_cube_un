@@ -2,6 +2,7 @@
 # Oui, c'est du tour par tour..
 import sqlite3
 from database.create_db import DB_PATH
+import pyfiglet
 
 def safe_int(val):
     try:
@@ -9,6 +10,7 @@ def safe_int(val):
     except (ValueError, TypeError):
         return 0  # ou une valeur par défaut
 
+victory_text = pyfiglet.figlet_format("\n🏆 Victoire", font="slant")
 
 # DB utils
 def get_creature_by_id(cid: int):
@@ -162,7 +164,8 @@ def battle_loop(p1_name, p2_name, f1, f2):
         print("\n💥 Double K.O. ! Match nul. Les deux aux urgences, personne n'a farmé d'XP.")
         return 0
     elif f2["hp"] <= 0:
-        print(f"\n🏆 Victoire de {p1_name} avec {f1['name']} ! (Propre.)")
+        print(victory_text)
+        print(f"\n🏆 de {p1_name} avec {f1['name']} ! (Propre.)")
         # Enregistrer la victoire dans l'historique
         try:
             from history import new_history
@@ -171,7 +174,8 @@ def battle_loop(p1_name, p2_name, f1, f2):
             print(f"⚠️ Erreur sauvegarde historique: {e}")
         return 1
     else:
-        print(f"\n🏆 Victoire de {p2_name} avec {f2['name']} ! (Respect.)")
+        print(victory_text)
+        print(f"\n🏆de {p2_name} avec {f2['name']} ! (Respect.)")
         # Enregistrer la victoire dans l'historique
         try:
             from history import new_history

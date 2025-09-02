@@ -3,9 +3,10 @@ import time
 import getpass
 import hashlib
 from database.db_connect import get_connection
+import pyfiglet
+from termcolor import colored
 
 conn, c = get_connection()
-
 
 # Fonction pour hasher le mot de passe
 def hash_password(password):
@@ -25,6 +26,9 @@ row = c.fetchone()
 
 # Si aucun hash, demande à l'utilisateur d'en créer un
 if row is None:
+    register_text = pyfiglet.figlet_format(" --REGISTER--", font="slant")
+    print(colored(register_text, "blue"))
+    print(register_text)
     print("🔐 Aucun mot de passe trouvé. Création d’un mot de passe initial.")
     pwd = getpass.getpass(prompt='🆕 Entrez un nouveau mot de passe : ')
     confirm = getpass.getpass(prompt='🔁 Confirmez le mot de passe : ')
@@ -43,10 +47,12 @@ if conn is None or c is None:
 
 # Fonction de vérification
 def verification():
+    login_text = pyfiglet.figlet_format(" --Login--", font="slant")
+    print(colored(login_text, "yellow"))
     while True:
         pseudo = os.getlogin()
         print(f"Bonjour {pseudo}")
-        pwd = getpass.getpass(prompt='🔐 Quel est votre mot de passe ?')
+        pwd = getpass.getpass(prompt="Quel est votre mot de passe ?")
 
         if hash_password(pwd) == stored_hash:
             print("✅ Lancement du jeu...")

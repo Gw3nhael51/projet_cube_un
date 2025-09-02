@@ -6,25 +6,25 @@ Développer un jeu de combat tour par tour en ligne de commande, où chaque joue
 
 ## 📁 Organisation du dépôt
 
-| Fichier / Dossier | Rôle principal |
-|-------------------|----------------|
-| `main.py` | Point d'entrée du programme |
-| `game.py` | Logique du jeu et déroulement des combats |
+| Fichier / Dossier | Rôle principal                                    |
+|-------------------|---------------------------------------------------|
+| `main.py` | Point d'entrée du programme                       |
 | `auth.py` | Gestion des utilisateurs et de l'authentification |
-| `battle.py` | Mécanique des affrontements |
-| `menu.py` | Interface utilisateur en ligne de commande |
-| `history.py` | Historique des parties |
-| `database/` | Connexion et structure SQLite |
-| `documentation/` | Docs détaillées des modules |
-| `todo.md` | Suivi des tâches |
+| `menu.py` | Interface utilisateur en ligne de commande        |
+| `history.py` | Historique des parties                            |
+| `game.py` | Logique du jeu et déroulement des combats         |
+| `battle.py` | Mécanique des affrontements                       |
+| `database/` | Connexion et structure avec SQLite                |
+| `documentation/` | Docs détaillées des modules                       |
+| `todo.md` | Suivi des tâches durant le projet                 |
 
 ⚠️ Ce dépôt est réalisé dans le cadre du module INFDIPC1. <br>
 https://github.com/Gw3nhael51/projet_cube_un
 
 ## 📄 Documentation
-1. [auth.py](documentation/auth.py.md) – Gestion des utilisateurs et de l'authentification  
-2. [main.py](documentation/main.py.md) – Point d'entrée du programme  
-3. [game.py](documentation/game.py.md) – Logique du jeu et déroulement des combats  
+1. [main.py](main.py) – Point d'entrée du programme  
+2. [auth.py](auth.py) – Gestion des utilisateurs et de l'authentification  
+3. [game.py](game.py) – Logique du jeu et déroulement des combats  
 
 ## ✅ Fichiers complémentaires
 - [todo.md](todo.md) – Liste des tâches à réaliser / réalisées
