@@ -22,11 +22,11 @@ def create_db():
         CREATE TABLE IF NOT EXISTS creatures (
             id_creature INTEGER PRIMARY KEY AUTOINCREMENT,
             name_creature TEXT UNIQUE,
-            hp_initial INTEGER, 
+            hp_initial TEXT, 
             attack_value INTEGER,
             defense_value INTEGER,
             spec_attack_name TEXT,
-            spec_attack_value INTEGER,  
+            spec_attack_value TEXT,
             spec_attack_descr TEXT
         );
 
@@ -37,11 +37,22 @@ def create_db():
             FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
         );
 
-        CREATE TABLE IF NOT EXISTS user_auth (
-            id_user INTEGER PRIMARY KEY AUTOINCREMENT,
-            pin_hash TEXT
-        )
-    """)
+        CREATE TABLE IF NOT EXISTS history (
+            id_battle INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_player_winner INTEGER,
+            id_creature INTEGER,
+            date DATETIME,
+            FOREIGN KEY (id_player_winner) REFERENCES players(id_player),
+            FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
+        );
+        
+        CREATE TABLE IF NOT EXISTS pin (
+                      id_pin INTEGER PRIMARY KEY AUTOINCREMENT,
+                      pin TEXT
+                      id_user INTEGER,
+                      FOREIGN KEY (id_user) REFERENCES player(id_user)
+                )
+        """)
 
     # Liste des créatures jouables
     creatures = [

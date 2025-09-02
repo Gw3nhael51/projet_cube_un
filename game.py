@@ -4,7 +4,6 @@ from rules.rules import rules
 from battle import battle_loop
 
 # -------------------Voir dans battle.py-------------------------
-
 # Connexion acceptée, lancement du jeu
 
 # ---------------------------------------------------------
@@ -115,10 +114,8 @@ def main():
     ]
 
     creature_player1 = choose_creature(player1, available_creatures)
-    # print(f"Liste après choix de {player1} : {[c['name_creature'] for c in available_creatures]}")
 
     creature_player2 = choose_creature(player2, available_creatures)
-    # print(f"Liste après choix de {player2} : {[c['name_creature'] for c in available_creatures]}")
 
     fight = [
         f"{player1}: a choisi {creature_player1['name_creature']} voici ses stats: PV: {creature_player1['hp_initial']}, Défense: {creature_player1['defense_value']}, Spéciale: {creature_player1['spec_attack_name']} - {creature_player1['spec_attack_descr']}",
