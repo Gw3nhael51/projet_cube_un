@@ -116,8 +116,9 @@ def battle_loop(p1_name, p2_name, f1, f2):
 
     print("\n=== Début du combat ! Que le meilleur spammeur gagne. ===")
 
-    while f1["hp"] > 0 and f2["hp"] > 0:
-        action = choose_action(owners[0], attacker)
+    while f1["hp_initial"] > 0 and f2["hp_initial"] > 0:
+        allow_pass = (turn_idx > 1)
+        allow_special = (not attacker["spec_used"])
 
         if action == 1:
             msg = do_attack(attacker, deff)
@@ -129,7 +130,7 @@ def battle_loop(p1_name, p2_name, f1, f2):
         print(msg)
 
         # Check fin
-        if deff["hp"] <= 0 or attacker["hp"] <= 0:
+        if deff["hp_initial"] <= 0 or attacker["hp_initial"] <= 0:
             break
 
         # On inverse les rôles comme dans une bonne prod : couplet 1 → couplet 2
@@ -137,7 +138,7 @@ def battle_loop(p1_name, p2_name, f1, f2):
         owners = (owners[1], owners[0])
 
     # Résultats : annonce officielle façon speaker
-    if f1["hp"] <= 0 and f2["hp"] <= 0:
+    if f1["hp_initial"] <= 0 and f2["hp_initial"] <= 0:
         print("\n💥 Double K.O. ! Match nul. Les deux aux urgences, personne n’a farmé d’XP.")
         return 0
     if f2["hp"] <= 0:
