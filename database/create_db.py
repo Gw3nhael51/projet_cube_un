@@ -53,7 +53,7 @@ def create_db():
             FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
         );
         
-        -- Créer la table du Code pin
+        -- Créer la table du Code pin pour auth_user
         
         CREATE TABLE IF NOT EXISTS pin (
             id_pin INTEGER PRIMARY KEY AUTOINCREMENT,
