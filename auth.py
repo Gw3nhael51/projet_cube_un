@@ -28,10 +28,9 @@ row = c.fetchone()
 if row is None:
     register_text = pyfiglet.figlet_format(" --REGISTER--", font="slant")
     print(colored(register_text, "blue"))
-    print(register_text)
     print("🔐 Aucun mot de passe trouvé. Création d’un mot de passe initial.")
-    pwd = getpass.getpass(prompt='🆕 Entrez un nouveau mot de passe : ')
-    confirm = getpass.getpass(prompt='🔁 Confirmez le mot de passe : ')
+    pwd = getpass.getpass(prompt='-> Entrez un nouveau mot de passe : ')
+    confirm = getpass.getpass(prompt='--> Confirmez le mot de passe : ')
     if pwd != confirm:
         print("❌ Les mots de passe ne correspondent pas.")
         exit()
