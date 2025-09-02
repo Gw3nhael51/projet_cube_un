@@ -21,6 +21,7 @@ def create_db():
     # Création des tables (schéma DB)
 
     cur.executescript("""
+        -- Créer la TABLE des créatures
         CREATE TABLE IF NOT EXISTS creatures (
             id_creature INTEGER PRIMARY KEY AUTOINCREMENT,
             name_creature TEXT UNIQUE,
@@ -31,6 +32,8 @@ def create_db():
             spec_attack_value TEXT,
             spec_attack_descr TEXT
         );
+        
+        -- Créer la table des joueurs
 
         CREATE TABLE IF NOT EXISTS players (
             id_player INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,7 +41,9 @@ def create_db():
             id_creature INTEGER,
             FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
         );
-
+        
+        -- Créer la table de l'historique de combats
+        
         CREATE TABLE IF NOT EXISTS history (
             id_battle INTEGER PRIMARY KEY AUTOINCREMENT,
             id_player_winner INTEGER,
@@ -47,13 +52,16 @@ def create_db():
             FOREIGN KEY (id_player_winner) REFERENCES players(id_player),
             FOREIGN KEY (id_creature) REFERENCES creatures(id_creature)
         );
-
+        
+        -- Créer la table du Code pin pour auth_user
+        
         CREATE TABLE IF NOT EXISTS pin (
-                      id_pin INTEGER PRIMARY KEY AUTOINCREMENT,
-                      pin TEXT
-                      id_user INTEGER,
-                      FOREIGN KEY (id_user) REFERENCES player(id_user)
-                )
+            id_pin INTEGER PRIMARY KEY AUTOINCREMENT,
+            pin TEXT,
+            id_user INTEGER,
+            FOREIGN KEY (id_user) REFERENCES players(id_player)
+        );
+
         """)
 
     # Liste des créatures jouables
