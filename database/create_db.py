@@ -49,11 +49,12 @@ def create_db():
         );
 
         CREATE TABLE IF NOT EXISTS pin (
-                      id_pin INTEGER PRIMARY KEY AUTOINCREMENT,
-                      pin TEXT
-                      id_user INTEGER,
-                      FOREIGN KEY (id_user) REFERENCES player(id_user)
-                )
+            id_pin INTEGER PRIMARY KEY AUTOINCREMENT,
+            pin TEXT,
+            id_user INTEGER,
+            FOREIGN KEY (id_user) REFERENCES players(id_player)
+        );
+
         """)
 
     # Liste des créatures jouables
