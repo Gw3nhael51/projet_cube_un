@@ -81,17 +81,33 @@ def do_special(att, deff):
     deff["hp"] -= raw
     return f"{att['name']} utilise {n} → {raw} dégâts bruts. Le classique qui régale."
 
-def choose_action(player_name, fighter):
-    # Petit menu sans chichi. On aime les vrais choix : taper, tricher une fois, ou regarder le vent.
-    print(f"\n— {player_name} joue ({fighter['name']}) —  PV={fighter['hp']}/{fighter['hp_max']}  ATK={fighter['atk']}  DEF={fighter['def']}")
-    print("1. Attaquer")
-    print("2. Capacité spéciale")
-    print("3. Passer (tu es sûr·e ?)")
+
+def choose_action(player_name, fighter, allow_pass: bool, allow_special: bool):
+    # Menu dynamique : on n’affiche que ce qui est autorisé
+    print(
+        f"\n— {player_name} joue ({fighter['name']}) —  PV={fighter['hp']}/{fighter['hp_max']}  ATK={fighter['atk']}  DEF={fighter['def']}")
+
+    options = {}
+    idx = 1
+    options[str(idx)] = ("Attaquer", 1)
+    print(f"{idx}. Attaquer")
+    idx += 1
+
+    if allow_special:
+        options[str(idx)] = ("Capacité spéciale", 2)
+        print(f"{idx}. Capacité spéciale")
+        idx += 1
+
+    if allow_pass:
+        options[str(idx)] = ("Passer", 3)
+        print(f"{idx}. Passer (si tu veux jouer mindgame)")
+
     while True:
         c = input("Choix: ").strip()
-        if c in ("1","2","3"):
-            return int(c)
-        print("Choix invalide, essaye 1/2/3. (Promis, il n’y avait pas de 4 caché.)")
+        if c in options:
+            return options[c][1]
+        print("Choix invalide. Sélectionne un numéro affiché (promis, pas de 4 caché).")
+
 
 def battle_loop(p1_name, p2_name, f1, f2):
     # Le ring est prêt : on alterne les baffes jusqu’à ce qu’il n’y ait plus de PV.
