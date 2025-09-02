@@ -1,8 +1,7 @@
 import sqlite3
-from pathlib import Path 
+from database.db_connect import get_connection, DB_PATH
 
-DB_folder = Path(__file__).parent/"database"
-DB_PATH = DB_folder / 'game.db'
+get_connection()
 
 def show_history(limit = 10):
   conn = sqlite3.connect(DB_PATH)

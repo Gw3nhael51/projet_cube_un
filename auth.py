@@ -52,7 +52,7 @@ def verification():
             print("✅ Lancement du jeu...")
             time.sleep(2)
             print("🎮 Ouverture du Menu")
-            os.system("python game.py")
+            os.system("python menu.py")
             break
         else:
             print("❌ Mot de passe incorrect 😔")

@@ -19,8 +19,9 @@ def main_menu():
             main()
 
         elif choix == "2":
-    # Ici 10 derniers combats sont affichés
-         show_history(limit=10)
+        # Ici 10 derniers combats sont affichés
+            show_history(limit=10) # Verifier si history est vide --> afficher message si vide,
+        # sinon afficher les 10 derniers combats
 
         else:
             print("❌ Choix invalide, réessayez.")
