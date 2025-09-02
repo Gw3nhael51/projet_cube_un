@@ -3,8 +3,6 @@ from database.db_connect import *
 from rules.rules import rules
 from battle import fighter_from_db
 from battle import battle_loop
-import pyfiglet
-from termcolor import colored
 
 # -------------------Voir dans battle.py-------------------------
 
@@ -12,9 +10,6 @@ from termcolor import colored
 
 # ---------------------------------------------------------
 # Fonction utilitaire : get_or_create_player
-select_text = pyfiglet.figlet_format("SELECT", font="slant")
-print(colored(select_text, "blue"))
-
 def get_or_create_player(numero_joueur):
 
     # Demande un pseudo, vérifie le format, cherche dans la DB, crée si besoin.

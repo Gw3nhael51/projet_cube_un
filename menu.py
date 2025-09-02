@@ -3,6 +3,8 @@ from history import show_history
 import pyfiglet
 from termcolor import colored
 
+select_text = pyfiglet.figlet_format("SELECT", font="slant")
+
 def main_menu():
 
     #Menu principal :
@@ -21,6 +23,7 @@ def main_menu():
 
         if choix == "1":
             # Lancer la partie via la fonction main() dans game.py
+            print(colored(select_text, "blue"))
             main()
 
         elif choix == "2":
