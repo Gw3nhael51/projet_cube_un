@@ -1,8 +1,7 @@
 # battle.py — moteur de combat
 # Oui, c’est du tour par tour..
-
 import sqlite3
-from create_db import DB_PATH
+from database.create_db import DB_PATH
 
 # DB utils
 def get_creature_by_id(cid: int):
