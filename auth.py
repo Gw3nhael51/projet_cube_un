@@ -11,9 +11,9 @@ def verification():
         if pwd == '123456':
             print("Lancement du jeu...")
             time.sleep(3)
-            print("ouverture du Jeu")
+            print("ouverture du Menu")
             print("Bienvenue...")
-            os.system("python game.py") # lance le jeu
+            os.system("python3 menu.py") # lance le jeu
             break
         else:
             print("Mot de passe incorrect 😔")

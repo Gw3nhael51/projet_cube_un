@@ -1,10 +1,11 @@
 import sqlite3
 from pathlib import Path 
 
+
 DB_folder = Path(__file__).parent/"database"
 DB_PATH = DB_folder / 'game.db'
 
-def show_history(limit = 10):
+def show_history(limit = 20):
   conn = sqlite3.connect(DB_PATH)
   conn.execute("PRAGMA foreign_keys=ON")
   cur = conn.cursor()
@@ -30,6 +31,8 @@ def show_history(limit = 10):
             print(f"#{row[0]} | {row[1]} | Vainqueur: {row[2]} | Créature: {row[3]}")
 
   conn.close()
+
   
 if __name__ == '__main__':
    show_history()
+   

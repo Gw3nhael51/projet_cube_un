@@ -1,4 +1,4 @@
 import os
 
 if __name__ == '__main__':
-    os.system("python auth.py")
+    os.system("python3 auth.py")
