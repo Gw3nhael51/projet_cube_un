@@ -84,7 +84,6 @@ def choose_creature(joueur_nom, creatures_disponibles):
         except ValueError:
             print("❌ Veuillez entrer un nombre.")
 
-
 # ---------------------------------------------------------
 # Point d'entrée principal
 

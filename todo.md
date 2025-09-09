@@ -28,7 +28,7 @@
 
 ## ⚔️ Combat Tour par Tour
 - [X] Créer une boucle de combat
-- [] Implémenter les 3 actions :
+- [X] Implémenter les 3 actions :
   - Attaquer
   - Capacité spéciale
   - Passer son tour (sauf tour1)
@@ -36,7 +36,7 @@
 - [X] Afficher les PV restants après chaque tour
 - [X] Déterminer la fin de partie (PV = 0)
 - [X] Afficher le gagnant avec le résumé du combat
-- [🔄] Enregistrer l’historique du combat
+- [X] Enregistrer l’historique du combat
 
 ## 🧪 Tests & Fiabilité
 - [X] Vérifier que toutes les fonctionnalités fonctionnent sans érreur(s)
@@ -50,11 +50,11 @@
 - [X] Écran de combat (PV + options)
 
 ## 📄 Spécifications Techniques
-- [] Décrire la formule de calcul des dégâts
-- [] Décrire la gestion des capacités spéciales
-- [] Décrire les règles de fin de partie
+- [X] Décrire la formule de calcul des dégâts
+- [X] Décrire la gestion des capacités spéciales
+- [X] Décrire les règles de fin de partie
 
 ## 🗣️ Soutenance
-- [🔄] Préparer une présentation de 15 minutes
-- [🔄] Présenter le fonctionnement de la base de données
-- [] Démonstration du jeu en console
+- [X] Préparer une présentation de 15 minutes
+- [X] Présenter le fonctionnement de la base de données
+- [X] Démonstration du jeu en console
