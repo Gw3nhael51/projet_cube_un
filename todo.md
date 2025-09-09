@@ -1,4 +1,5 @@
-# ✅ ToDoList – Projet Jeu de Combat 
+# ✅ ToDoList – Projet Jeu de Combat
+## Statut: Terminé
 
 ## 🔐 Authentification
 - [X] Créer un fichier `auth.py` avec mot de passe requis
