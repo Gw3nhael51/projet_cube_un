@@ -14,14 +14,13 @@ Développer un jeu de combat tour par tour en ligne de commande, où chaque joue
 | `history.py` | Historique des parties                            |
 | `game.py` | Logique du jeu et déroulement des combats         |
 | `battle.py` | Mécanique des affrontements                       |
-| `database/` | Connexion et structure avec SQLite                |
-| `documentation/` | Docs détaillées des modules                       |
+| `database/` | Connexion et structure avec SQLite                       |
 | `todo.md` | Suivi des tâches durant le projet                 |
 
 ⚠️ Ce dépôt est réalisé dans le cadre du module INFDIPC1. <br>
 https://github.com/Gw3nhael51/projet_cube_un
 
-## 📄 Documentation
+## 📄 Fichiers principaux
 1. [main.py](main.py) – Point d'entrée du programme  
 2. [auth.py](auth.py) – Gestion des utilisateurs et de l'authentification  
 3. [game.py](game.py) – Logique du jeu et déroulement des combats  
